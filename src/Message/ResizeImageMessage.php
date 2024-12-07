@@ -6,12 +6,17 @@ final class ResizeImageMessage
 {
 
      public function __construct(
-         private readonly string $filter,
-         private readonly string $url,
-         private readonly string $callbackUrl,
+         private readonly string  $filter,
+         private readonly string  $path,
+         private readonly ?string $callbackUrl=null,
          private readonly ?string $proxy=null,
      ) {
      }
+
+    public function getProxy(): ?string
+    {
+        return $this->proxy;
+    }
 
     public function getCallbackUrl(): string
     {
@@ -23,8 +28,8 @@ final class ResizeImageMessage
         return $this->filter;
     }
 
-    public function getUrl(): string
+    public function getPath(): string
     {
-        return $this->url;
+        return $this->path;
     }
 }

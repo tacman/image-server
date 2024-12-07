@@ -4,12 +4,15 @@ namespace App\Controller;
 
 use App\Message\DownloadImage;
 use App\Message\ResizeImageMessage;
+use App\Service\AppService;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -18,6 +21,7 @@ class AppController extends AbstractController
 
     public function __construct(
         private MessageBusInterface $messageBus,
+        private AppService $appService,
     )
     {
     }
@@ -30,11 +34,9 @@ class AppController extends AbstractController
     }
 
     #[Route('/test-webhook', name: 'app_webhook')]
-    public function webhook(): Response
+    public function webhook(Request $request): Response
     {
-        return $this->json([
-            'status' => 'ok',
-        ]);
+        return new Response(json_encode($request->request->all(), JSON_PRETTY_PRINT+ JSON_UNESCAPED_SLASHES));
     }
 
     #[Route('/fetch/', name: 'app_fetch')]
@@ -52,10 +54,17 @@ class AppController extends AbstractController
     #[Template('homepage.html.twig')]
     public function requestResizedImage(
         string $filter,
-        #[MapQueryParameter] string $url
+        #[MapQueryParameter] ?string $url=null,
+        #[MapQueryParameter] ?string $path=null,
+        #[MapQueryParameter] ?string $callbackUrl=null
     ): JsonResponse
     {
-        $this->messageBus->dispatch(new ResizeImageMessage($filter, $url));
+        if (!$media = $this->appService->getMedia($url, $path)) {
+            throw new NotFoundHttpException("$url nor $path found");
+        }
+        $this->messageBus->dispatch(
+            new ResizeImageMessage($filter, $media->getPath(), $callbackUrl)
+        );
 
         return $this->json([]);
     }

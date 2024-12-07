@@ -4,11 +4,13 @@ framework:
 
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
-            async:
+            normal:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
-                    use_notify: true
-                    check_delayed_interval: 60000
+                    exchange:
+                        name: normal
+                    queues:
+                        normal: ~
                 retry_strategy:
                     max_retries: 3
                     multiplier: 2
@@ -21,10 +23,11 @@ framework:
             messenger.bus.default: []
 
         routing:
-            Symfony\Component\Mailer\Messenger\SendEmailMessage: async
-            Symfony\Component\Notifier\Message\ChatMessage: async
-            Symfony\Component\Notifier\Message\SmsMessage: async
-#            App\Message\ResizeImageMessage: async
+#            Symfony\Component\Mailer\Messenger\SendEmailMessage: async
+#            Symfony\Component\Notifier\Message\ChatMessage: async
+#            Symfony\Component\Notifier\Message\SmsMessage: async
+#            App\Message\ResizeImageMessage: normal
+#            App\Message\DownloadImage: normal
 
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
