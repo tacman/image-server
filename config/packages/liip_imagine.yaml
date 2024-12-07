@@ -44,3 +44,8 @@ liip_imagine:
 #                    allow_upscale: true
                     mode: inset
 
+
+    controller:
+        filter_action:        'App\Controller\ImageController::filterAction'
+        filter_runtime_action:        'App\Controller\ImageController::filterRuntimeAction'
+        redirect_response_code: 302

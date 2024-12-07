@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1a29d79a5a650530634c0b8774ebe7b6",
+    "content-hash": "abac5ecef1ea5b5bf1fe95f2b61452e3",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2149,6 +2149,81 @@
             "time": "2024-06-03T08:48:36+00:00"
         },
         {
+            "name": "knplabs/knp-time-bundle",
+            "version": "v2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KnpLabs/KnpTimeBundle.git",
+                "reference": "93e9528415b28a19872d74b28e816045c0fd217b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KnpLabs/KnpTimeBundle/zipball/93e9528415b28a19872d74b28e816045c0fd217b",
+                "reference": "93e9528415b28a19872d74b28e816045c0fd217b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony/config": "^5.4|^6.0|^7.0",
+                "symfony/dependency-injection": "^5.4|^6.0|^7.0",
+                "symfony/translation": "^5.4|^6.0|^7.0"
+            },
+            "conflict": {
+                "phpunit/phpunit": "<8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.11",
+                "phpunit/phpunit": "^9.6",
+                "symfony/framework-bundle": "^5.4|^6.0|^7.0",
+                "symfony/phpunit-bridge": "^5.4|^6.0|^7.0",
+                "symfony/twig-bundle": "^5.4|^6.0|^7.0"
+            },
+            "suggest": {
+                "symfony/twig-bundle": "to use the Twig `time_diff()` function and `|time_diff`/`|duration` filter"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Knp\\Bundle\\TimeBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "KnpLabs Team",
+                    "homepage": "https://knplabs.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://github.com/KnpLabs/KnpTimeBundle/contributors"
+                }
+            ],
+            "description": "Making your dates and durations look sensible and descriptive",
+            "homepage": "https://github.com/KnpLabs/KnpTimeBundle",
+            "keywords": [
+                "bundle",
+                "date",
+                "descriptive time",
+                "duration",
+                "knp",
+                "knplabs",
+                "time"
+            ],
+            "support": {
+                "issues": "https://github.com/KnpLabs/KnpTimeBundle/issues",
+                "source": "https://github.com/KnpLabs/KnpTimeBundle/tree/v2.4.0"
+            },
+            "time": "2024-06-11T09:38:28+00:00"
+        },
+        {
             "name": "league/flysystem",
             "version": "3.29.1",
             "source": {
@@ -3709,6 +3784,83 @@
                 }
             ],
             "time": "2024-11-18T23:39:39+00:00"
+        },
+        {
+            "name": "survos/simple-datatables-bundle",
+            "version": "1.5.418",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/survos/SurvosSimpleDatatablesBundle.git",
+                "reference": "288fd4c281bc7f139d057f157621609087d4a782"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/survos/SurvosSimpleDatatablesBundle/zipball/288fd4c281bc7f139d057f157621609087d4a782",
+                "reference": "288fd4c281bc7f139d057f157621609087d4a782",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.3",
+                "survos/core-bundle": "^1.5",
+                "symfony/config": "^6.4 || ^7.1",
+                "symfony/dependency-injection": "^6.4 || ^7.1",
+                "symfony/http-kernel": "^6.4 || ^7.1",
+                "symfony/options-resolver": "^6.4 || ^7.1",
+                "symfony/stimulus-bundle": "^2.21",
+                "symfony/ux-twig-component": "^2.8",
+                "twig/twig": "^3.4"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.0",
+                "phpunit/phpunit": "^11.4",
+                "rector/rector": "dev-main",
+                "roave/security-advisories": "dev-latest",
+                "symfony/browser-kit": "^6.4 || ^7.1",
+                "symfony/framework-bundle": "^6.4 || ^7.1",
+                "symfony/phpunit-bridge": "^6.4 || ^7.1",
+                "symfony/twig-bundle": "^6.4 || ^7.1",
+                "symfony/var-dumper": "^6.4 || ^7.1"
+            },
+            "suggest": {
+                "monolog/monolog": "Allows more advanced logging of the application flow"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Survos\\SimpleDatatables\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tac Tacelosky",
+                    "email": "tacman@gmail.com"
+                }
+            ],
+            "description": "incorporate simple datatables, using twig and stimulus",
+            "keywords": [
+                "symfony-ux",
+                "symfony6"
+            ],
+            "support": {
+                "issues": "https://github.com/survos/SurvosSimpleDatatablesBundle/issues",
+                "source": "https://github.com/survos/SurvosSimpleDatatablesBundle/tree/1.5.418"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-12-07T14:16:18+00:00"
         },
         {
             "name": "survos/storage-bundle",
@@ -9830,6 +9982,53 @@
     ],
     "packages-dev": [
         {
+            "name": "jetbrains/phpstorm-stubs",
+            "version": "v2024.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JetBrains/phpstorm-stubs.git",
+                "reference": "cf7e447ddfa7f0cbab0c1dd38392f0cb05f9881c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JetBrains/phpstorm-stubs/zipball/cf7e447ddfa7f0cbab0c1dd38392f0cb05f9881c",
+                "reference": "cf7e447ddfa7f0cbab0c1dd38392f0cb05f9881c",
+                "shasum": ""
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "v3.46.0",
+                "nikic/php-parser": "v5.0.0",
+                "phpdocumentor/reflection-docblock": "5.3.0",
+                "phpunit/phpunit": "10.5.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "PhpStormStubsMap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "PHP runtime & extensions header files for PhpStorm",
+            "homepage": "https://www.jetbrains.com/phpstorm",
+            "keywords": [
+                "autocomplete",
+                "code",
+                "inference",
+                "inspection",
+                "jetbrains",
+                "phpstorm",
+                "stubs",
+                "type"
+            ],
+            "support": {
+                "source": "https://github.com/JetBrains/phpstorm-stubs/tree/v2024.2"
+            },
+            "time": "2024-06-17T19:18:18+00:00"
+        },
+        {
             "name": "masterminds/html5",
             "version": "2.9.0",
             "source": {
@@ -9955,6 +10154,161 @@
                 }
             ],
             "time": "2024-11-08T17:47:46+00:00"
+        },
+        {
+            "name": "nette/php-generator",
+            "version": "v4.1.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nette/php-generator.git",
+                "reference": "d201c9bc217e0969d1b678d286be49302972fb56"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nette/php-generator/zipball/d201c9bc217e0969d1b678d286be49302972fb56",
+                "reference": "d201c9bc217e0969d1b678d286be49302972fb56",
+                "shasum": ""
+            },
+            "require": {
+                "nette/utils": "^3.2.9 || ^4.0",
+                "php": "8.0 - 8.4"
+            },
+            "require-dev": {
+                "jetbrains/phpstorm-attributes": "dev-master",
+                "nette/tester": "^2.4",
+                "nikic/php-parser": "^4.18 || ^5.0",
+                "phpstan/phpstan": "^1.0",
+                "tracy/tracy": "^2.8"
+            },
+            "suggest": {
+                "nikic/php-parser": "to use ClassType::from(withBodies: true) & ClassType::fromCode()"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.1-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0-only",
+                "GPL-3.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "David Grudl",
+                    "homepage": "https://davidgrudl.com"
+                },
+                {
+                    "name": "Nette Community",
+                    "homepage": "https://nette.org/contributors"
+                }
+            ],
+            "description": "🐘 Nette PHP Generator: generates neat PHP code for you. Supports new PHP 8.4 features.",
+            "homepage": "https://nette.org",
+            "keywords": [
+                "code",
+                "nette",
+                "php",
+                "scaffolding"
+            ],
+            "support": {
+                "issues": "https://github.com/nette/php-generator/issues",
+                "source": "https://github.com/nette/php-generator/tree/v4.1.7"
+            },
+            "time": "2024-11-29T01:41:18+00:00"
+        },
+        {
+            "name": "nette/utils",
+            "version": "v4.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nette/utils.git",
+                "reference": "736c567e257dbe0fcf6ce81b4d6dbe05c6899f96"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nette/utils/zipball/736c567e257dbe0fcf6ce81b4d6dbe05c6899f96",
+                "reference": "736c567e257dbe0fcf6ce81b4d6dbe05c6899f96",
+                "shasum": ""
+            },
+            "require": {
+                "php": "8.0 - 8.4"
+            },
+            "conflict": {
+                "nette/finder": "<3",
+                "nette/schema": "<1.2.2"
+            },
+            "require-dev": {
+                "jetbrains/phpstorm-attributes": "dev-master",
+                "nette/tester": "^2.5",
+                "phpstan/phpstan": "^1.0",
+                "tracy/tracy": "^2.9"
+            },
+            "suggest": {
+                "ext-gd": "to use Image",
+                "ext-iconv": "to use Strings::webalize(), toAscii(), chr() and reverse()",
+                "ext-intl": "to use Strings::webalize(), toAscii(), normalize() and compare()",
+                "ext-json": "to use Nette\\Utils\\Json",
+                "ext-mbstring": "to use Strings::lower() etc...",
+                "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0-only",
+                "GPL-3.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "David Grudl",
+                    "homepage": "https://davidgrudl.com"
+                },
+                {
+                    "name": "Nette Community",
+                    "homepage": "https://nette.org/contributors"
+                }
+            ],
+            "description": "🛠  Nette Utils: lightweight utilities for string & array manipulation, image handling, safe JSON encoding/decoding, validation, slug or strong password generating etc.",
+            "homepage": "https://nette.org",
+            "keywords": [
+                "array",
+                "core",
+                "datetime",
+                "images",
+                "json",
+                "nette",
+                "paginator",
+                "password",
+                "slugify",
+                "string",
+                "unicode",
+                "utf-8",
+                "utility",
+                "validation"
+            ],
+            "support": {
+                "issues": "https://github.com/nette/utils/issues",
+                "source": "https://github.com/nette/utils/tree/v4.0.5"
+            },
+            "time": "2024-08-07T15:39:19+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -10555,6 +10909,75 @@
                 }
             ],
             "time": "2024-12-06T05:57:38+00:00"
+        },
+        {
+            "name": "roave/better-reflection",
+            "version": "6.44.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Roave/BetterReflection.git",
+                "reference": "6ff8860687ac93ba00384005fcba52e3e400aac1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Roave/BetterReflection/zipball/6ff8860687ac93ba00384005fcba52e3e400aac1",
+                "reference": "6ff8860687ac93ba00384005fcba52e3e400aac1",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "jetbrains/phpstorm-stubs": "2024.2",
+                "nikic/php-parser": "^5.3.1",
+                "php": "~8.2.0 || ~8.3.2 || ~8.4.1"
+            },
+            "conflict": {
+                "thecodingmachine/safe": "<1.1.3"
+            },
+            "require-dev": {
+                "phpbench/phpbench": "^1.3.1",
+                "phpunit/phpunit": "^11.4.3"
+            },
+            "suggest": {
+                "composer/composer": "Required to use the ComposerSourceLocator"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Roave\\BetterReflection\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "James Titcumb",
+                    "email": "james@asgrim.com",
+                    "homepage": "https://github.com/asgrim"
+                },
+                {
+                    "name": "Marco Pivetta",
+                    "email": "ocramius@gmail.com",
+                    "homepage": "https://ocramius.github.io/"
+                },
+                {
+                    "name": "Gary Hockin",
+                    "email": "gary@roave.com",
+                    "homepage": "https://github.com/geeh"
+                },
+                {
+                    "name": "Jaroslav Hanslík",
+                    "email": "kukulich@kukulich.cz",
+                    "homepage": "https://github.com/kukulich"
+                }
+            ],
+            "description": "Better Reflection - an improved code reflection API",
+            "support": {
+                "issues": "https://github.com/Roave/BetterReflection/issues",
+                "source": "https://github.com/Roave/BetterReflection/tree/6.44.0"
+            },
+            "time": "2024-12-02T14:26:42+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -11530,6 +11953,121 @@
                 }
             ],
             "time": "2024-10-20T05:08:20+00:00"
+        },
+        {
+            "name": "survos/maker-bundle",
+            "version": "1.5.418",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/survos/SurvosMakerBundle.git",
+                "reference": "f462688c2b800865400d401e6910a69eb0e35250"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/survos/SurvosMakerBundle/zipball/f462688c2b800865400d401e6910a69eb0e35250",
+                "reference": "f462688c2b800865400d401e6910a69eb0e35250",
+                "shasum": ""
+            },
+            "require": {
+                "nette/php-generator": "^3.5||^4.1",
+                "php": "^8.3",
+                "roave/better-reflection": "^6.0",
+                "sebastian/diff": "^4.0||^5.0||^6.0.1",
+                "symfony/config": "^6.4 || ^7.1",
+                "symfony/console": "^6.4 || ^7.1",
+                "symfony/options-resolver": "^6.4 || ^7.1",
+                "symfony/security-http": "^6.4 || ^7.1",
+                "symfony/string": "^6.4 || ^7.1",
+                "twig/twig": "^3.4",
+                "zenstruck/console-extra": "^1.4"
+            },
+            "conflict": {
+                "survos/api-grid-bundle": "<1.2.57",
+                "survos/auth-bundle": "<1.2.57",
+                "survos/barcode-bundle": "<1.2.57",
+                "survos/bootstrap-bundle": "<1.2.57",
+                "survos/command-bundle": "<1.2.57",
+                "survos/core-bundle": "<1.2.57",
+                "survos/crawler-bundle": "<1.2.57",
+                "survos/doc-bundle": "<1.2.57",
+                "survos/faker-bundle": "<1.2.57",
+                "survos/grid-bundle": "<1.2.57",
+                "survos/grid-group-bundle": "<1.2.57",
+                "survos/html-prettify-bundle": "<1.2.57",
+                "survos/import-bridge": "<1.2.57",
+                "survos/inspection-bundle": "<1.2.57",
+                "survos/location-bundle": "<1.2.57",
+                "survos/providence-bundle": "<1.2.57",
+                "survos/ruler-bundle": "<1.2.57",
+                "survos/stripe-product": "<1.2.57",
+                "survos/tree-bundle": "<1.2.57",
+                "survos/wiki-bundle": "<1.2.57",
+                "survos/workflow-helper-bundle": "<1.2.57"
+            },
+            "require-dev": {
+                "doctrine/doctrine-bundle": "^2.7",
+                "doctrine/orm": "^2.12",
+                "haydenpierce/class-finder": "^0.4.3",
+                "phpstan/phpstan": "^2.0",
+                "squizlabs/php_codesniffer": "^3.7",
+                "symfony/form": "^6.4 || ^7.1",
+                "symfony/http-client": "^6.4 || ^7.1",
+                "symfony/maker-bundle": "^1.5",
+                "symfony/phpunit-bridge": "^6.4 || ^7.1",
+                "symfony/polyfill-php80": "^1.16.0",
+                "symfony/process": "^6.4 || ^7.1",
+                "symfony/security-core": "^6.4 || ^7.1",
+                "symfony/security-csrf": "^6.4 || ^7.1",
+                "symfony/twig-bundle": "^6.4 || ^7.1",
+                "symfony/validator": "^6.4 || ^7.1",
+                "symfony/yaml": "^6.4 || ^7.1"
+            },
+            "suggest": {
+                "symfony/workflow": "To generate a workflow from PHP constants",
+                "symplify/easy-coding-standard": "cleanup generated files"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "symfony": {
+                    "require": "^6.4 | ^7.0",
+                    "allow-contrib": "true"
+                },
+                "branch-alias": {
+                    "dev-main": "1.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Survos\\Bundle\\MakerBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tac Tacelosky",
+                    "email": "tacman@gmail.com"
+                }
+            ],
+            "description": "Tools to generate controllers and templates for the admin interface",
+            "keywords": [
+                "crud",
+                "generator",
+                "symfony"
+            ],
+            "support": {
+                "issues": "https://github.com/survos/SurvosMakerBundle/issues",
+                "source": "https://github.com/survos/SurvosMakerBundle/tree/1.5.418"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-11-24T12:53:21+00:00"
         },
         {
             "name": "symfony/browser-kit",

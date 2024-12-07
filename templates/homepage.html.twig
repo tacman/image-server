@@ -1,0 +1,31 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h1>Survos Image Resizing Server</h1>
+
+    <div>
+        This server manages the resizing for all images, including museado.org
+
+    </div>
+
+    {% set url = 'https://sammlung.belvedere.at/internal/media/downloaddispatcher/130189?download=' %}
+    {% set webhook = url('app_webhook', {url: url}) %}
+
+    <a href="{{ path('app_fetch', {
+        url: url,
+        callbackUrl: webhook
+    }) }}"
+       target="_blank"
+    >
+        <button>Fetch</button>
+    </a>
+
+    <a href="{{ path('app_request_filter', {
+        filter: 'small',
+        url: url
+    }) }}"
+       target="_blank"
+    >
+        Request resize
+    </a>
+{% endblock %}
