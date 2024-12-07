@@ -1,0 +1,46 @@
+# config/packages/liip_imagine.yamn
+
+liip_imagine:
+    driver: imagick
+    twig:
+        mode: lazy
+    default_filter_set_settings:
+#        format: webp
+        quality: 60
+
+    loaders:
+        flysystem_loader:
+            flysystem:
+                # this comes from flysystem.yaml
+                filesystem_service: pictures.storage
+
+    # default loader to use for all filter sets
+    data_loader: flysystem_loader
+    filter_sets:
+        auto_rotate: ~
+        large:
+            filters:
+                thumbnail:
+                    size:          [400, 400]
+                    allow_upscale: true
+                    mode: inset
+        medium:
+            filters:
+                thumbnail:
+                    size:          [400, 400]
+                    allow_upscale: true
+                    mode: inset
+        small:
+            filters:
+                thumbnail:
+                    size:          [200, 200]
+                    allow_upscale: true
+                    mode: inset
+
+        tiny:
+            filters:
+                thumbnail:
+                    size:          [120, 120]
+#                    allow_upscale: true
+                    mode: inset
+
