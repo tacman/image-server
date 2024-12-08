@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e3fcef91fc5ed7889a4ae199874cd6e",
+    "content-hash": "def709b68fe161bcba3b5757783f7bad",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2065,6 +2065,122 @@
                 "source": "https://github.com/php-imagine/Imagine/tree/1.5.0"
             },
             "time": "2024-12-03T14:37:55+00:00"
+        },
+        {
+            "name": "inspector-apm/inspector-php",
+            "version": "3.8.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/inspector-apm/inspector-php.git",
+                "reference": "a492f18ebfbea41b32d71284d5a51e14ed948f5c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/inspector-apm/inspector-php/zipball/a492f18ebfbea41b32d71284d5a51e14ed948f5c",
+                "reference": "a492f18ebfbea41b32d71284d5a51e14ed948f5c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Inspector\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Valerio Barbera",
+                    "email": "valerio@inspector.dev"
+                }
+            ],
+            "description": "Inspector for PHP applications.",
+            "keywords": [
+                "inspector",
+                "monitoring",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/inspector-apm/inspector-php/issues",
+                "source": "https://github.com/inspector-apm/inspector-php/tree/3.8.8"
+            },
+            "time": "2024-11-21T21:07:53+00:00"
+        },
+        {
+            "name": "inspector-apm/inspector-symfony",
+            "version": "1.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/inspector-apm/inspector-symfony.git",
+                "reference": "0533bafe9dfe813649e830a890f5a4b8e43db61f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/inspector-apm/inspector-symfony/zipball/0533bafe9dfe813649e830a890f5a4b8e43db61f",
+                "reference": "0533bafe9dfe813649e830a890f5a4b8e43db61f",
+                "shasum": ""
+            },
+            "require": {
+                "inspector-apm/inspector-php": "^3.8",
+                "php": ">=7.2.5",
+                "symfony/config": "^4.4|^5.2|^6.0|^7.0",
+                "symfony/console": "^4.4|^5.2|^6.0|^7.0",
+                "symfony/dependency-injection": "^4.4|^5.2|^6.0|^7.0",
+                "symfony/event-dispatcher": "^4.4|^5.2|^6.0|^7.0",
+                "symfony/framework-bundle": "^4.4|^5.2|^6.0|^7.0",
+                "symfony/http-kernel": "^4.4|^5.2|^6.0|^7.0",
+                "symfony/security-bundle": "^4.4|^5.2|^6.0|^7.0",
+                "symfony/yaml": "^4.4|^5.2|^6.0|^7.0"
+            },
+            "require-dev": {
+                "doctrine/doctrine-bundle": "^2.4",
+                "phpunit/phpunit": "^9.5",
+                "symfony/framework-bundle": "^4.4|^5.2|^6.0|^7.0",
+                "symfony/messenger": "^4.4|^5.2|^6.0|^7.0",
+                "symfony/test-pack": "^1.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Inspector\\Symfony\\Bundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Valerio Barbera",
+                    "email": "valerio@inspector.dev"
+                },
+                {
+                    "name": "Serhii Smirnov",
+                    "email": "free.smilesrg@gmail.com"
+                }
+            ],
+            "description": "Code Execution Monitoring for Symfony applications.",
+            "homepage": "https://www.inspector.dev",
+            "keywords": [
+                "bundle",
+                "inspector",
+                "monitoring",
+                "php",
+                "symfony"
+            ],
+            "support": {
+                "issues": "https://github.com/inspector-apm/inspector-symfony/issues",
+                "source": "https://github.com/inspector-apm/inspector-symfony/tree/1.3.2"
+            },
+            "time": "2024-12-06T15:43:57+00:00"
         },
         {
             "name": "knplabs/knp-menu",

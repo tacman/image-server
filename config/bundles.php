@@ -27,4 +27,5 @@ return [
     Survos\ImageClientBundle\SurvosImageClientBundle::class => ['all' => true],
     Bizkit\VersioningBundle\BizkitVersioningBundle::class => ['all' => true],
     Survos\DeploymentBundle\SurvosDeploymentBundle::class => ['dev' => true],
+    Inspector\Symfony\Bundle\InspectorBundle::class => ['all' => true],
 ];
