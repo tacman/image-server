@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "98fccd24b13123ac1947394ba6066c19",
+    "content-hash": "5e3fcef91fc5ed7889a4ae199874cd6e",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -157,6 +157,64 @@
                 "source": "https://github.com/aws/aws-sdk-php/tree/3.334.1"
             },
             "time": "2024-12-05T01:17:41+00:00"
+        },
+        {
+            "name": "bizkit/versioning-bundle",
+            "version": "v1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/HypeMC/versioning-bundle.git",
+                "reference": "6d7a04cbd5ea70d9f3695dce4025690eb9ad86f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/HypeMC/versioning-bundle/zipball/6d7a04cbd5ea70d9f3695dce4025690eb9ad86f6",
+                "reference": "6d7a04cbd5ea70d9f3695dce4025690eb9ad86f6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "php": ">=7.2",
+                "symfony/config": "^4.4 || ^5.2 || ^6.0 || ^7.0",
+                "symfony/console": "^4.4 || ^5.2 || ^6.0 || ^7.0",
+                "symfony/dependency-injection": "^4.4.2 || ^5.2 || ^6.0 || ^7.0",
+                "symfony/http-kernel": "^4.4 || ^5.2 || ^6.0 || ^7.0",
+                "symfony/process": "^4.4 || ^5.2 || ^6.0 || ^7.0",
+                "symfony/yaml": "^4.4 || ^5.2 || ^6.0 || ^7.0"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "^6.4.1"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Bizkit\\VersioningBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "HypeMC",
+                    "email": "hypemc@gmail.com"
+                }
+            ],
+            "description": "Symfony bundle which provides a way to version your application using various versioning strategies.",
+            "homepage": "https://github.com/HypeMC/versioning-bundle",
+            "keywords": [
+                "git",
+                "semver",
+                "vcs",
+                "version",
+                "versioning"
+            ],
+            "support": {
+                "issues": "https://github.com/HypeMC/versioning-bundle/issues",
+                "source": "https://github.com/HypeMC/versioning-bundle/tree/v1.2.1"
+            },
+            "time": "2024-12-02T23:50:39+00:00"
         },
         {
             "name": "composer/semver",
@@ -3536,7 +3594,7 @@
         },
         {
             "name": "survos/bootstrap-bundle",
-            "version": "1.5.418",
+            "version": "1.5.419",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/BootstrapBundle.git",
@@ -3622,7 +3680,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/BootstrapBundle/issues",
-                "source": "https://github.com/survos/BootstrapBundle/tree/1.5.418"
+                "source": "https://github.com/survos/BootstrapBundle/tree/1.5.419"
             },
             "funding": [
                 {
@@ -3722,16 +3780,16 @@
         },
         {
             "name": "survos/image-client-bundle",
-            "version": "1.0",
+            "version": "1.5.419",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosImageClientBundle.git",
-                "reference": "5f6db5fd6323aa08cb3987b51f26316f279fb369"
+                "reference": "158ef7c7b6222435f30237e79cedbe5b631b4068"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/SurvosImageClientBundle/zipball/5f6db5fd6323aa08cb3987b51f26316f279fb369",
-                "reference": "5f6db5fd6323aa08cb3987b51f26316f279fb369",
+                "url": "https://api.github.com/repos/survos/SurvosImageClientBundle/zipball/158ef7c7b6222435f30237e79cedbe5b631b4068",
+                "reference": "158ef7c7b6222435f30237e79cedbe5b631b4068",
                 "shasum": ""
             },
             "require": {
@@ -3767,7 +3825,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/SurvosImageClientBundle/issues",
-                "source": "https://github.com/survos/SurvosImageClientBundle/tree/1.0"
+                "source": "https://github.com/survos/SurvosImageClientBundle/tree/1.5.419"
             },
             "funding": [
                 {
@@ -3775,7 +3833,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-12-07T22:30:07+00:00"
+            "time": "2024-12-08T15:40:27+00:00"
         },
         {
             "name": "survos/installer",
@@ -3842,7 +3900,7 @@
         },
         {
             "name": "survos/simple-datatables-bundle",
-            "version": "1.5.418",
+            "version": "1.5.419",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosSimpleDatatablesBundle.git",
@@ -3907,7 +3965,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/SurvosSimpleDatatablesBundle/issues",
-                "source": "https://github.com/survos/SurvosSimpleDatatablesBundle/tree/1.5.418"
+                "source": "https://github.com/survos/SurvosSimpleDatatablesBundle/tree/1.5.419"
             },
             "funding": [
                 {
@@ -3919,16 +3977,16 @@
         },
         {
             "name": "survos/storage-bundle",
-            "version": "1.5.418",
+            "version": "1.5.419",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosStorageBundle.git",
-                "reference": "d9657dbac1f1fdc4de2f5d01d5eac33c27c5a4cb"
+                "reference": "afbf5bd104757cfab2bd18acad4009e3f900d64b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/SurvosStorageBundle/zipball/d9657dbac1f1fdc4de2f5d01d5eac33c27c5a4cb",
-                "reference": "d9657dbac1f1fdc4de2f5d01d5eac33c27c5a4cb",
+                "url": "https://api.github.com/repos/survos/SurvosStorageBundle/zipball/afbf5bd104757cfab2bd18acad4009e3f900d64b",
+                "reference": "afbf5bd104757cfab2bd18acad4009e3f900d64b",
                 "shasum": ""
             },
             "require": {
@@ -3974,7 +4032,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/SurvosStorageBundle/issues",
-                "source": "https://github.com/survos/SurvosStorageBundle/tree/1.5.418"
+                "source": "https://github.com/survos/SurvosStorageBundle/tree/1.5.419"
             },
             "funding": [
                 {
@@ -3982,7 +4040,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-12-07T14:13:40+00:00"
+            "time": "2024-12-08T15:40:30+00:00"
         },
         {
             "name": "symfony/amqp-messenger",
@@ -10106,64 +10164,6 @@
     ],
     "packages-dev": [
         {
-            "name": "bizkit/versioning-bundle",
-            "version": "v1.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/HypeMC/versioning-bundle.git",
-                "reference": "6d7a04cbd5ea70d9f3695dce4025690eb9ad86f6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/HypeMC/versioning-bundle/zipball/6d7a04cbd5ea70d9f3695dce4025690eb9ad86f6",
-                "reference": "6d7a04cbd5ea70d9f3695dce4025690eb9ad86f6",
-                "shasum": ""
-            },
-            "require": {
-                "ext-dom": "*",
-                "php": ">=7.2",
-                "symfony/config": "^4.4 || ^5.2 || ^6.0 || ^7.0",
-                "symfony/console": "^4.4 || ^5.2 || ^6.0 || ^7.0",
-                "symfony/dependency-injection": "^4.4.2 || ^5.2 || ^6.0 || ^7.0",
-                "symfony/http-kernel": "^4.4 || ^5.2 || ^6.0 || ^7.0",
-                "symfony/process": "^4.4 || ^5.2 || ^6.0 || ^7.0",
-                "symfony/yaml": "^4.4 || ^5.2 || ^6.0 || ^7.0"
-            },
-            "require-dev": {
-                "symfony/phpunit-bridge": "^6.4.1"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-4": {
-                    "Bizkit\\VersioningBundle\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "HypeMC",
-                    "email": "hypemc@gmail.com"
-                }
-            ],
-            "description": "Symfony bundle which provides a way to version your application using various versioning strategies.",
-            "homepage": "https://github.com/HypeMC/versioning-bundle",
-            "keywords": [
-                "git",
-                "semver",
-                "vcs",
-                "version",
-                "versioning"
-            ],
-            "support": {
-                "issues": "https://github.com/HypeMC/versioning-bundle/issues",
-                "source": "https://github.com/HypeMC/versioning-bundle/tree/v1.2.1"
-            },
-            "time": "2024-12-02T23:50:39+00:00"
-        },
-        {
             "name": "jetbrains/phpstorm-stubs",
             "version": "v2024.2",
             "source": {
@@ -12138,16 +12138,16 @@
         },
         {
             "name": "survos/deployment-bundle",
-            "version": "1.5.418",
+            "version": "1.5.419",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosDeploymentBundle.git",
-                "reference": "60e9d3b47094e5a70e85ae4751024f637a7a4890"
+                "reference": "e0501f639ead379f311602e1c4a29835e9fce079"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/SurvosDeploymentBundle/zipball/60e9d3b47094e5a70e85ae4751024f637a7a4890",
-                "reference": "60e9d3b47094e5a70e85ae4751024f637a7a4890",
+                "url": "https://api.github.com/repos/survos/SurvosDeploymentBundle/zipball/e0501f639ead379f311602e1c4a29835e9fce079",
+                "reference": "e0501f639ead379f311602e1c4a29835e9fce079",
                 "shasum": ""
             },
             "require": {
@@ -12185,7 +12185,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/SurvosDeploymentBundle/issues",
-                "source": "https://github.com/survos/SurvosDeploymentBundle/tree/1.5.418"
+                "source": "https://github.com/survos/SurvosDeploymentBundle/tree/1.5.419"
             },
             "funding": [
                 {
@@ -12193,11 +12193,11 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-12-07T14:16:18+00:00"
+            "time": "2024-12-08T15:40:26+00:00"
         },
         {
             "name": "survos/maker-bundle",
-            "version": "1.5.418",
+            "version": "1.5.419",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosMakerBundle.git",
@@ -12300,7 +12300,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/SurvosMakerBundle/issues",
-                "source": "https://github.com/survos/SurvosMakerBundle/tree/1.5.418"
+                "source": "https://github.com/survos/SurvosMakerBundle/tree/1.5.419"
             },
             "funding": [
                 {
