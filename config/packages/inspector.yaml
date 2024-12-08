@@ -7,6 +7,9 @@ inspector:
     ignore_commands:
         - 'doctrine:migration:migrate'
         - 'd:m:m'
+        - importmap:install
+        - asset-map:compile
+        - 'assets:compile'
         - 'debug:autowiring'
         - 'debug:config'
         - 'debug:container'

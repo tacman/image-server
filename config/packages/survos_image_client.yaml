@@ -1,4 +1,4 @@
 survos_image_client:
-    api_endpoint:         'https://images.wip'
+    api_endpoint:         '%env(API_ENDPOINT)%'
     api_key:              ''
 
