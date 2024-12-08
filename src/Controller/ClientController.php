@@ -24,7 +24,7 @@ class ClientController extends AbstractController
     #[Route('/test-dispatch', name: 'app_test_dispatch')]
     public function testDispatch(
         ImageClientService $imageClientService,
-    ): array
+    ): array|Response
     {
         $data = json_decode(file_get_contents('https://dummyjson.com/products'));
         foreach ($data->products as $product) {
@@ -34,9 +34,8 @@ class ClientController extends AbstractController
             $imageClientService->dispatchProcess($images, [
                 'small'
             ]);
-            dd($images);
         }
-        return [];
+        return $this->redirectToRoute('app_homepage');
     }
 
     // https://insight.symfony.com/docs/notifications/custom-webhook.html
