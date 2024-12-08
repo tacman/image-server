@@ -5,17 +5,31 @@
 
     <div>
         This server manages the resizing for all images, including museado.org
-
     </div>
 
-    {% set url = 'https://sammlung.belvedere.at/internal/media/downloaddispatcher/130189?download=' %}
-    {% set url = 'https://art.thewalters.org/images/art/PS1_54.975_Fnt_DD_T08.jpg' %}
+    {% for row in rows %}
+        <li>
+            {{ row.originalUrl }} (Original size: {{ (row.size/1024)|number_format(1) }}k)
+            {% for filter, size in row.filters %}
+                {% set thumb = row.path|survos_image_filter(filter) %}
+                <img src="{{ thumb }}" alt="{{ thumb }}"/>
+                {{ filter }} ({{ (size/1024)|number_format(1) }}k)
+
+            {% endfor %}
+            {{ dump(row) }}
+        </li>
+    {% endfor %}
+
+    {% set belvedereUrl = 'https://sammlung.belvedere.at/internal/media/downloaddispatcher/130189?download=' %}
+    {% set waltersUrl = 'https://art.thewalters.org/images/art/PS1_54.975_Fnt_DD_T08.jpg' %}
     {% set webhook = url('app_webhook') %}
-    <a href="{{ webhook }}" target="_blank">{{ webhook }}</a>
+    <a href="{{ webhook }}" target="_blank">
+        {{ webhook }}
+    </a>
 
 
     <a href="{{ path('app_dispatch_process', {
-        urls: [url],
+        urls: [waltersUrl],
         callbackUrl: webhook
     }) }}"
        target="_blank"
@@ -29,7 +43,7 @@
 
     <a href="{{ path('app_request_filter', {
         filter: 'small',
-        url: url
+        url: waltersUrl
     }) }}"
        target="_blank"
     >

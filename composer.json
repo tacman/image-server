@@ -1,10 +1,12 @@
 {
+    "name": "survos-sites/sais",
+    "description": "Survos Async Image Server, async images using LiipImagine and Flysystem",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.2",
+        "php": "^8.3",
         "ext-ctype": "*",
         "ext-fileinfo": "*",
         "ext-iconv": "*",
@@ -51,8 +53,8 @@
         "symfony/validator": "^7.2",
         "symfony/web-link": "^7.2",
         "symfony/yaml": "^7.2",
-        "twig/extra-bundle": "^2.12|^3.16",
-        "twig/twig": "^2.12|^3.16"
+        "twig/extra-bundle": "^3.16",
+        "twig/twig": "^3.16"
     },
     "config": {
         "allow-plugins": {
@@ -108,6 +110,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^11.5",
+        "survos/deployment-bundle": "^1.5",
         "survos/maker-bundle": "^1.5",
         "symfony/browser-kit": "^7.2",
         "symfony/css-selector": "^7.2",

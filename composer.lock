@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3bf0fae52cbbaa594dc0856729a7f3a0",
+    "content-hash": "d1012cf31eff7266087fc7d3bdd2189a",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -10108,6 +10108,64 @@
     ],
     "packages-dev": [
         {
+            "name": "bizkit/versioning-bundle",
+            "version": "v1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/HypeMC/versioning-bundle.git",
+                "reference": "6d7a04cbd5ea70d9f3695dce4025690eb9ad86f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/HypeMC/versioning-bundle/zipball/6d7a04cbd5ea70d9f3695dce4025690eb9ad86f6",
+                "reference": "6d7a04cbd5ea70d9f3695dce4025690eb9ad86f6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "php": ">=7.2",
+                "symfony/config": "^4.4 || ^5.2 || ^6.0 || ^7.0",
+                "symfony/console": "^4.4 || ^5.2 || ^6.0 || ^7.0",
+                "symfony/dependency-injection": "^4.4.2 || ^5.2 || ^6.0 || ^7.0",
+                "symfony/http-kernel": "^4.4 || ^5.2 || ^6.0 || ^7.0",
+                "symfony/process": "^4.4 || ^5.2 || ^6.0 || ^7.0",
+                "symfony/yaml": "^4.4 || ^5.2 || ^6.0 || ^7.0"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "^6.4.1"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Bizkit\\VersioningBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "HypeMC",
+                    "email": "hypemc@gmail.com"
+                }
+            ],
+            "description": "Symfony bundle which provides a way to version your application using various versioning strategies.",
+            "homepage": "https://github.com/HypeMC/versioning-bundle",
+            "keywords": [
+                "git",
+                "semver",
+                "vcs",
+                "version",
+                "versioning"
+            ],
+            "support": {
+                "issues": "https://github.com/HypeMC/versioning-bundle/issues",
+                "source": "https://github.com/HypeMC/versioning-bundle/tree/v1.2.1"
+            },
+            "time": "2024-12-02T23:50:39+00:00"
+        },
+        {
             "name": "jetbrains/phpstorm-stubs",
             "version": "v2024.2",
             "source": {
@@ -12081,6 +12139,65 @@
             "time": "2024-10-20T05:08:20+00:00"
         },
         {
+            "name": "survos/deployment-bundle",
+            "version": "1.5.418",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/survos/SurvosDeploymentBundle.git",
+                "reference": "60e9d3b47094e5a70e85ae4751024f637a7a4890"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/survos/SurvosDeploymentBundle/zipball/60e9d3b47094e5a70e85ae4751024f637a7a4890",
+                "reference": "60e9d3b47094e5a70e85ae4751024f637a7a4890",
+                "shasum": ""
+            },
+            "require": {
+                "bizkit/versioning-bundle": "^1.2",
+                "php": "^8.3",
+                "symfony/config": "^6.4 || ^7.1",
+                "symfony/console": "^6.4 || ^7.1",
+                "symfony/dependency-injection": "^6.4 || ^7.1",
+                "symfony/form": "^6.4 || ^7.1",
+                "symfony/http-kernel": "^6.4 || ^7.1",
+                "twig/twig": "^3.4",
+                "zenstruck/console-extra": "^1.4"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.0",
+                "symfony/browser-kit": "^6.4 || ^7.1",
+                "symfony/framework-bundle": "^6.4 || ^7.1",
+                "symfony/phpunit-bridge": "^6.4 || ^7.1",
+                "symfony/twig-bundle": "^6.4 || ^7.1",
+                "symfony/var-dumper": "^6.4 || ^7.1"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Survos\\DeploymentBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "keywords": [
+                "symfony-ux",
+                "symfony6"
+            ],
+            "support": {
+                "issues": "https://github.com/survos/SurvosDeploymentBundle/issues",
+                "source": "https://github.com/survos/SurvosDeploymentBundle/tree/1.5.418"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-12-07T14:16:18+00:00"
+        },
+        {
             "name": "survos/maker-bundle",
             "version": "1.5.418",
             "source": {
@@ -12782,7 +12899,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.2",
+        "php": "^8.3",
         "ext-ctype": "*",
         "ext-fileinfo": "*",
         "ext-iconv": "*"
