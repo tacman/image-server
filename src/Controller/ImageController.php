@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Message\ResizeImageMessage;
 use Imagine\Exception\RuntimeException;
 use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\Controller\ImagineController;
@@ -10,21 +11,25 @@ use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Service\FilterService;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\TransportNamesStamp;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ImageController extends ImagineController
 {
     public function __construct(
-        private FilterService $filterService,
+        #[Autowire('@liip_imagine.service.filter')] private FilterService $filterService,
         private DataManager $dataManager,
         private SignerInterface $signer,
         private ?ControllerConfig $controllerConfig = null,
         private ?CacheManager $cacheManager=null,
+        private ?MessageBusInterface $messageBus=null,
     ) {
         parent::__construct($this->filterService, $this->dataManager, $this->signer, $this->controllerConfig);
 
@@ -71,33 +76,24 @@ class ImageController extends ImagineController
      *
      * @return RedirectResponse
      */
+        // /media/cache/resolve/{filter}/{path}
     public function filterAction(Request $request, $path, $filter)
     {
+            $this->messageBus->dispatch(
+                new ResizeImageMessage($filter, $path),
+                stamps: [
+                    new TransportNamesStamp('sync')
+                ]
+            );
 
-        $path = PathHelper::urlPathToFilePath($path);
-        $resolver = $request->get('resolver');
-
-        // this is the final url, but it also generates the image which is slow.
-        $url =  $this->filterService->getUrlOfFilteredImage(
-            $path,
-            $filter,
-            $resolver,
-            $this->isWebpSupported($request)
-        );
-
-        dd($url);
-
-        $parent = parent::filterAction($request, $path, $filter);
-        dd($parent, $path, $resolver);
-
-        return $this->createRedirectResponse(function () use ($path, $filter, $resolver, $request) {
-            return $this->filterService->getUrlOfFilteredImage(
+            $redirect =  $this->filterService->getUrlOfFilteredImage(
                 $path,
                 $filter,
-                $resolver,
+                null,
                 $this->isWebpSupported($request)
             );
-        }, $path, $filter);
+
+            return new RedirectResponse($redirect);
     }
 
     private function isWebpSupported(Request $request): bool

@@ -107,4 +107,15 @@ class Media
 
         return $this;
     }
+
+    public function addFilter($filter, int $size = null): static
+    {
+        $filters = $this->getFilters()??[];
+        if (!in_array($filter, $filters, true)) {
+            $filters[$filter] = $size;
+        }
+        $this->setFilters($filters);
+        return $this;
+
+    }
 }

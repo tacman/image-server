@@ -28,3 +28,13 @@ services:
             - '@liip_imagine.service.filter'
             - '@liip_imagine.data.manager'
             - '@liip_imagine.cache.signer'
+
+#    App\Service\ApiService:
+#        public: true
+#        autowire: true
+#        autoconfigure: true
+##        arguments:
+##            -
+##            - '@liip_imagine.service.filter'
+##            - '@liip_imagine.data.manager'
+##            - '@liip_imagine.cache.signer'

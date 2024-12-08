@@ -5,14 +5,14 @@ liip_imagine:
     twig:
         mode: lazy
     default_filter_set_settings:
-#        format: webp
-        quality: 60
+        format: webp
+        quality: 68
 
     loaders:
         flysystem_loader:
             flysystem:
                 # this comes from flysystem.yaml
-                filesystem_service: pictures.storage
+                filesystem_service: default.storage
 
     # default loader to use for all filter sets
     data_loader: flysystem_loader
@@ -21,7 +21,7 @@ liip_imagine:
         large:
             filters:
                 thumbnail:
-                    size:          [400, 400]
+                    size:          [800, 800]
                     allow_upscale: true
                     mode: inset
         medium:

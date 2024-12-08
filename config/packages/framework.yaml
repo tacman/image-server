@@ -4,10 +4,16 @@ framework:
 
     # Note that the session will be started ONLY if you read or write from it.
     session: true
+    router:
+        default_uri: '%env(API_ENDPOINT)%'
 
     #esi: true
     #fragments: true
-
+    http_client:
+        default_options:
+            max_redirects: 8
+            timeout: 30
+            proxy: '%env(HTTP_PROXY)%'
 when@test:
     framework:
         test: true
