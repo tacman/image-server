@@ -5,6 +5,12 @@
         "php",
         "symfony"
     ],
+    "cron": [
+        {
+            "command": "bin/console mess:consume high  --time-limit 270",
+            "schedule": "*/5 * * * *"
+        }
+    ],
     "repository": "https://github.com/survos-sites/sais",
     "scripts": {
         "dokku": {

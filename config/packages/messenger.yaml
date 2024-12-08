@@ -16,6 +16,8 @@ framework:
                     multiplier: 2
             low:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+            high:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
             failed: 'doctrine://default?queue_name=failed'
             sync: 'sync://'
 
