@@ -24,4 +24,5 @@ return [
     Survos\Bundle\MakerBundle\SurvosMakerBundle::class => ['dev' => true, 'test' => true],
     Survos\SimpleDatatables\SurvosSimpleDatatablesBundle::class => ['all' => true],
     Knp\Bundle\TimeBundle\KnpTimeBundle::class => ['all' => true],
+    Survos\ImageClientBundle\SurvosImageClientBundle::class => ['all' => true],
 ];

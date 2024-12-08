@@ -19,11 +19,16 @@ class Media
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $originalUrl = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?array $filters = null;
+
     /**
      * @param string|null $path
      */
     public function __construct(
         #[ORM\Id]
+        #[ORM\Column(length: 255)]
+        private string $code,
         #[ORM\Column(length: 255)]
         private string $path
     )
@@ -75,6 +80,30 @@ class Media
     public function setOriginalUrl(?string $originalUrl): static
     {
         $this->originalUrl = $originalUrl;
+
+        return $this;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): static
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    public function getFilters(): ?array
+    {
+        return $this->filters;
+    }
+
+    public function setFilters(?array $filters): static
+    {
+        $this->filters = $filters;
 
         return $this;
     }

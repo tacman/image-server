@@ -13,13 +13,18 @@
     {% set webhook = url('app_webhook') %}
     <a href="{{ webhook }}" target="_blank">{{ webhook }}</a>
 
-    <a href="{{ path('app_fetch', {
-        url: url,
+
+    <a href="{{ path('app_dispatch_process', {
+        urls: [url],
         callbackUrl: webhook
     }) }}"
        target="_blank"
     >
-        <button>Fetch</button>
+        <button>Raw Dispatch</button>
+    </a>
+
+    <a href="{{ path('app_test_dispatch') }}">
+        Dispatch dummy requests
     </a>
 
     <a href="{{ path('app_request_filter', {

@@ -1,0 +1,4 @@
+survos_image_client:
+    api_endpoint:         'https://images.wip'
+    api_key:              ''
+

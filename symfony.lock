@@ -78,6 +78,9 @@
     "survos/core-bundle": {
         "version": "1.5.395"
     },
+    "survos/image-client-bundle": {
+        "version": "1.0"
+    },
     "survos/maker-bundle": {
         "version": "1.5.418"
     },
