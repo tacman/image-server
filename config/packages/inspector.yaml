@@ -1,13 +1,13 @@
 inspector:
     ingestion_key: '%env(INSPECTOR_INGESTION_KEY)%'
-    enabled: false
+    enabled: true
     ignore_routes:
         - '/wdt*'
         - '/profiler*'
     ignore_commands:
         - 'doctrine:migration:migrate'
         - 'd:m:m'
-#        - 'messenger:stats'
+        - 'messenger:stats'
         - importmap:install
         - asset-map:compile
         - 'assets:compile'
