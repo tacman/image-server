@@ -5,7 +5,7 @@ inspector:
         - '/wdt*'
         - '/profiler*'
     ignore_commands:
-        - 'doctrine:migration:migrate'
+        - 'doctrine:migrations:migrate'
         - 'd:m:m'
         - 'messenger:stats'
         - importmap:install

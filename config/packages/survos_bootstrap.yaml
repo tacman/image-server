@@ -1,10 +1,10 @@
 survos_bootstrap:
   app:
-    code: museado
-    abbr: <b>mus</b>eado
+    code: sais
+    abbr: <b>async</b>Imager
 #    logo: /images/museado-sidebar-logo.png
-    logo: /images/museado-sidebar-small-logo.png
-    logo_small: /images/museado-sidebar-small-logo.png
+#    logo: /images/museado-sidebar-small-logo.png
+#    logo_small: /images/museado-sidebar-small-logo.png
   routes:
     homepage: app_homepage
     login: app_login

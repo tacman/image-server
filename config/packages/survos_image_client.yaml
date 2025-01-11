@@ -1,4 +1,0 @@
-survos_image_client:
-    api_endpoint:         '%env(API_ENDPOINT)%'
-    api_key:              ''
-

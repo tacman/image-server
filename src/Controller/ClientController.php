@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Repository\MediaRepository;
-use Survos\ImageClientBundle\Service\ImageClientService;
+use Survos\SaisBundle\Model\ProcessPayload;
+use Survos\SaisBundle\Service\SaisClientService;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,6 +15,14 @@ use Symfony\Component\Routing\Attribute\Route;
 class ClientController extends AbstractController
 {
 
+    #[Route('/status', name: 'app_status')]
+    public function status(): array|JsonResponse
+    {
+        return $this->json([
+            'status' => 'okay'
+        ]);
+    }
+
     #[Route('/', name: 'app_homepage')]
     #[Template('homepage.html.twig')]
     public function index(MediaRepository $mediaRepository): array
@@ -22,20 +31,29 @@ class ClientController extends AbstractController
     }
 
     #[Route('/test-dispatch', name: 'app_test_dispatch')]
+    #[Template('test-dispatch.html.twig')]
     public function testDispatch(
-        ImageClientService $imageClientService,
+        SaisClientService $saisService,
     ): array|Response
     {
+        $response  = $saisService->fetch('/status');
+        dd($response);
+        $data = json_decode(file_get_contents('https://'));
         $data = json_decode(file_get_contents('https://dummyjson.com/products'));
+        $results = [];
         foreach ($data->products as $product) {
             foreach ($product->images as $image) {
                 $images[] = $image;
             }
-            $imageClientService->dispatchProcess($images, [
-                'small'
-            ]);
+            $payload = new ProcessPayload($images, ['small']);
+            $results[] =
+                [
+                    'payload' => $payload,
+                    'response' => $saisService->dispatchProcess($payload)
+                ];
         }
-        return $this->redirectToRoute('app_homepage');
+        return $results;
+
     }
 
     // https://insight.symfony.com/docs/notifications/custom-webhook.html

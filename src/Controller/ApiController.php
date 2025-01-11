@@ -6,7 +6,7 @@ use App\Message\DownloadImage;
 use App\Message\ResizeImageMessage;
 use App\Repository\MediaRepository;
 use App\Service\ApiService;
-use Survos\ImageClientBundle\Service\ImageClientService;
+use Survos\SaisBundle\Service\SaisClientService;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -36,12 +36,14 @@ class ApiController extends AbstractController
         #[MapQueryParameter] ?string $callbackUrl=null,
     ): JsonResponse
     {
+        $codes = [];
         // urls? codes? paths?
         foreach ($urls as $url) {
-            $codes[] = ImageClientService::calculateCode(url: $url);
+            $codes[] = SaisClientService::calculateCode(url: $url);
             $this->messageBus->dispatch(new DownloadImage($url,
                 $filters,
                 $callbackUrl));
+            break;
         }
 
         // maybe do the filters here instead of download?

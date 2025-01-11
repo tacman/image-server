@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MediaController!{% endblock %}
+
+{% block body %}
+
+    <twig:simple_datatables
+            :data="medias"
+            :caller="_self"
+    >
+
+    </twig:simple_datatables>
+{% endblock %}

@@ -105,11 +105,11 @@
     "survos/deployment-bundle": {
         "version": "1.5.418"
     },
-    "survos/image-client-bundle": {
-        "version": "1.0"
-    },
     "survos/maker-bundle": {
         "version": "1.5.418"
+    },
+    "survos/sais-bundle": {
+        "version": "1.5.421"
     },
     "survos/simple-datatables-bundle": {
         "version": "1.5.418"

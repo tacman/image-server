@@ -18,7 +18,7 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
 use Liip\ImagineBundle\Service\FilterService;
 use Psr\Log\LoggerInterface;
-use Survos\ImageClientBundle\Service\ImageClientService;
+use Survos\SaisBundle\Service\SaisClientService;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -43,7 +43,7 @@ class ApiService
         private readonly FilterService          $filterService,
         private SerializerInterface             $serializer,
         private NormalizerInterface             $normalizer,
-        #[Autowire('%env(API_ENDPOINT)%')] private string $apiEndpoint
+        #[Autowire('%env(SAIS_API_ENDPOINT)%')] private string $apiEndpoint
     )
     {
     }
@@ -100,8 +100,8 @@ class ApiService
             throw new \RuntimeException('Must specify a url or path');
         }
         if (!$path) {
-            $code = ImageClientService::calculateCode($url);
-            $path = ImageClientService::calculatePath($code);
+            $code = SaisClientService::calculateCode($url);
+            $path = SaisClientService::calculatePath($code);
         }
         if (!$media = $this->mediaRepository->find($path)) {
             dd($path . " missing from media");
@@ -113,9 +113,9 @@ class ApiService
     public function onDownloadImage(DownloadImage $message): void
     {
         $url = $message->getUrl();
-        $code = ImageClientService::calculateCode(url: $url);
-        $path = ImageClientService::calculatePath($code);
-        $tempFile = ImageClientService::calculateCode($url); // no dirs
+        $code = SaisClientService::calculateCode(url: $url);
+        $path = SaisClientService::calculatePath($code);
+        $tempFile = SaisClientService::calculateCode($url); // no dirs
         if (!file_exists($tempFile)) {
             $this->downloadUrl($url, $tempFile);
         }
