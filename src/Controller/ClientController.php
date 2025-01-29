@@ -38,7 +38,6 @@ class ClientController extends AbstractController
     {
         $response  = $saisService->fetch('/status');
         dd($response);
-        $data = json_decode(file_get_contents('https://'));
         $data = json_decode(file_get_contents('https://dummyjson.com/products'));
         $results = [];
         foreach ($data->products as $product) {

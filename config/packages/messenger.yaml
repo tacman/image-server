@@ -4,19 +4,19 @@ framework:
 
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
-            normal:
+            sais:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
                     exchange:
-                        name: normal
+                        name: sais
                     queues:
-                        normal: ~
+                        sais: ~
                 retry_strategy:
                     max_retries: 3
                     multiplier: 2
-            low:
-                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
             high:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+            low:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
             failed: 'doctrine://default?queue_name=failed'
             sync: 'sync://'
@@ -30,9 +30,9 @@ framework:
 #            Symfony\Component\Mailer\Messenger\SendEmailMessage: async
 #            Symfony\Component\Notifier\Message\ChatMessage: async
 #            Symfony\Component\Notifier\Message\SmsMessage: async
-            App\Message\ResizeImageMessage: normal
+            App\Message\ResizeImageMessage: sais
             App\Message\SendWebhookMessage: low
-            App\Message\DownloadImage: normal
+#            App\Message\DownloadImage: sais
 
             # Route your messages to the transports
             # 'App\Message\YourMessage': async

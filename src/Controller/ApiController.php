@@ -2,10 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Media;
+use App\Form\ProcessPayloadType;
 use App\Message\DownloadImage;
 use App\Message\ResizeImageMessage;
 use App\Repository\MediaRepository;
 use App\Service\ApiService;
+use Doctrine\ORM\EntityManagerInterface;
+use Survos\SaisBundle\Model\ProcessPayload;
 use Survos\SaisBundle\Service\SaisClientService;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,9 +18,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ApiController extends AbstractController
 {
@@ -25,30 +31,77 @@ class ApiController extends AbstractController
         private MessageBusInterface $messageBus,
         private ApiService          $apiService,
         private MediaRepository     $mediaRepository,
+        private EntityManagerInterface $entityManager,
     )
     {
     }
 
-    #[Route('/dispatch_process/', name: 'app_dispatch_process')]
+    // this is in the calling application, here for testing only
+    #[Route('/handle_image_resize', name: 'handle_image_resize')]
+    public function handleResizeImage(Request $request): Response
+    {
+        return $this->json(['status' => 'ok']);
+    }
+
+    #[Route('/test-dispatch', name: 'test_dispatch')]
+    public function testDispatch(
+        UrlGeneratorInterface $urlGenerator,
+        ApiController $apiController,
+        Request $request
+    ): Response
+    {
+        $callbackUrl = $urlGenerator->generate('handle_image_resize');
+        $processPayload = new ProcessPayload([
+            'https://cdn.dummyjson.com/products/images/beauty/Powder%20Canister/1.png',
+            'https://cdn.dummyjson.com/products/images/beauty/Red%20Nail%20Polish/1.png'
+        ], [
+            'thumb','medium'
+        ], $callbackUrl);
+        $form = $this->createForm(ProcessPayloadType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // get the payload
+            $payload = $form->getData();
+            $response = $apiController->dispatchProcess($payload);
+        }
+    }
+
+    #[Route('/dispatch_process.{_format}', name: 'app_dispatch_process', methods: ['POST'])]
     public function dispatchProcess(
-        #[MapQueryParameter] array $urls=[],
-        #[MapQueryParameter] array $filters=[],
-        #[MapQueryParameter] ?string $callbackUrl=null,
+        #[MapRequestPayload] ProcessPayload $payload,
     ): JsonResponse
     {
+        foreach ($payload->images as $image) {
+
+        }
         $codes = [];
         // urls? codes? paths?
         foreach ($urls as $url) {
-            $codes[] = SaisClientService::calculateCode(url: $url);
-            $this->messageBus->dispatch(new DownloadImage($url,
-                $filters,
-                $callbackUrl));
-            break;
+            $code = SaisClientService::calculateCode(url: $url);
+            if (!$media = $this->mediaRepository->find($code)) {
+                $media = new Media($code, originalUrl: $url);
+                $this->entityManager->persist($media);
+            }
+            $codes[] = $code;
+            // or maybe an array?
+            $response[] = [
+                'code' => $code,
+                'url' => $url
+                ];
         }
+        $this->entityManager->flush();
 
         // maybe do the filters here instead of download?
 
         $listing = $this->mediaRepository->findBy(['code' => $codes]);
+        foreach ($listing as $media) {
+            // depending on the marking/filter status, dispatch
+            $envelope = $this->messageBus->dispatch(new DownloadImage($url,
+                $code,
+                $filters,
+                $callbackUrl));
+        }
+
         return $this->json($listing);
     }
 

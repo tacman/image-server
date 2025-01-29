@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\MediaRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Survos\SaisBundle\Service\SaisClientService;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
 class Media
@@ -16,9 +18,6 @@ class Media
     #[ORM\Column]
     private ?int $size = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $originalUrl = null;
-
     #[ORM\Column(nullable: true)]
     private ?array $filters = null;
 
@@ -28,11 +27,17 @@ class Media
     public function __construct(
         #[ORM\Id]
         #[ORM\Column(length: 255)]
-        private string $code,
+        private ?string $code=null,
         #[ORM\Column(length: 255)]
-        private string $path
+        private ?string $path=null,
+        #[ORM\Column(type: Types::TEXT)]
+        private ?string $originalUrl=null
     )
     {
+        if ($this->originalUrl && !$this->code) {
+            $this->code = SaisClientService::calculateCode(url: $this->originalUrl);
+
+        }
     }
 
 
@@ -108,11 +113,14 @@ class Media
         return $this;
     }
 
-    public function addFilter($filter, int $size = null): static
+    public function addFilter($filter, ?int $size = null, ?string $url=null): static
     {
         $filters = $this->getFilters()??[];
         if (!in_array($filter, $filters, true)) {
-            $filters[$filter] = $size;
+            $filters[$filter] = [
+                'size' => $size,
+                'url' => $url
+                ];
         }
         $this->setFilters($filters);
         return $this;

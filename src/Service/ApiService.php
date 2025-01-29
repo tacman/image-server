@@ -87,7 +87,7 @@ class ApiService
         $media = $this->mediaRepository->findOneBy(['path' => $path]);
         assert($media, "No media for $path");
         $size = (int)$headers['content-length'][0];
-        $media->addFilter($filter, $size);
+        $media->addFilter($filter, $size, $url);
 
     }
 

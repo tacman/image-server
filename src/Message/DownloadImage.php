@@ -7,9 +7,10 @@ final class DownloadImage
 
      public function __construct(
          private readonly string $url,
+         private ?string $code=null,
          private readonly array $filters=[],
          private readonly ?string $callbackUrl=null,
-         private readonly ?string $proxy='http://127.0.0.1:7080',
+         private readonly ?string $proxy='127.0.0.1:7080',
      ) {
      }
 
