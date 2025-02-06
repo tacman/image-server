@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "166628bb0624a3f8b0940f4651984498",
+    "content-hash": "00759207427a253535d903317215cbfb",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.339.7",
+            "version": "3.339.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "7b7e48ce7970c0416c5fda045df7b93948fbf643"
+                "reference": "c0e959cc4bedd9a819f419f5bc29675a8fd12714"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7b7e48ce7970c0416c5fda045df7b93948fbf643",
-                "reference": "7b7e48ce7970c0416c5fda045df7b93948fbf643",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c0e959cc4bedd9a819f419f5bc29675a8fd12714",
+                "reference": "c0e959cc4bedd9a819f419f5bc29675a8fd12714",
                 "shasum": ""
             },
             "require": {
@@ -154,9 +154,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.339.7"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.339.8"
             },
-            "time": "2025-02-05T19:06:15+00:00"
+            "time": "2025-02-06T19:03:13+00:00"
         },
         {
             "name": "bizkit/versioning-bundle",
@@ -3798,16 +3798,16 @@
         },
         {
             "name": "survos/bootstrap-bundle",
-            "version": "1.5.500",
+            "version": "1.5.501",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/BootstrapBundle.git",
-                "reference": "6d4bb16ce53209ce7967747124b0d48b1092927b"
+                "reference": "6579b2e4cbc36a939cad3bc362ba7065efe5c1b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/BootstrapBundle/zipball/6d4bb16ce53209ce7967747124b0d48b1092927b",
-                "reference": "6d4bb16ce53209ce7967747124b0d48b1092927b",
+                "url": "https://api.github.com/repos/survos/BootstrapBundle/zipball/6579b2e4cbc36a939cad3bc362ba7065efe5c1b2",
+                "reference": "6579b2e4cbc36a939cad3bc362ba7065efe5c1b2",
                 "shasum": ""
             },
             "require": {
@@ -3885,7 +3885,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/BootstrapBundle/issues",
-                "source": "https://github.com/survos/BootstrapBundle/tree/1.5.500"
+                "source": "https://github.com/survos/BootstrapBundle/tree/1.5.501"
             },
             "funding": [
                 {
@@ -3893,11 +3893,11 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-30T02:59:43+00:00"
+            "time": "2025-02-06T17:13:43+00:00"
         },
         {
             "name": "survos/core-bundle",
-            "version": "1.5.500",
+            "version": "1.5.501",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosCoreBundle.git",
@@ -3974,7 +3974,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/SurvosCoreBundle/issues",
-                "source": "https://github.com/survos/SurvosCoreBundle/tree/1.5.500"
+                "source": "https://github.com/survos/SurvosCoreBundle/tree/1.5.501"
             },
             "funding": [
                 {
@@ -4045,7 +4045,7 @@
         },
         {
             "name": "survos/sais-bundle",
-            "version": "1.5.500",
+            "version": "1.5.501",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosSaisBundle.git",
@@ -4092,7 +4092,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/SurvosSaisBundle/issues",
-                "source": "https://github.com/survos/SurvosSaisBundle/tree/1.5.500"
+                "source": "https://github.com/survos/SurvosSaisBundle/tree/1.5.501"
             },
             "funding": [
                 {
@@ -4104,7 +4104,7 @@
         },
         {
             "name": "survos/simple-datatables-bundle",
-            "version": "1.5.500",
+            "version": "1.5.501",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosSimpleDatatablesBundle.git",
@@ -4169,7 +4169,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/SurvosSimpleDatatablesBundle/issues",
-                "source": "https://github.com/survos/SurvosSimpleDatatablesBundle/tree/1.5.500"
+                "source": "https://github.com/survos/SurvosSimpleDatatablesBundle/tree/1.5.501"
             },
             "funding": [
                 {
@@ -4181,7 +4181,7 @@
         },
         {
             "name": "survos/storage-bundle",
-            "version": "1.5.500",
+            "version": "1.5.501",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosStorageBundle.git",
@@ -4236,7 +4236,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/SurvosStorageBundle/issues",
-                "source": "https://github.com/survos/SurvosStorageBundle/tree/1.5.500"
+                "source": "https://github.com/survos/SurvosStorageBundle/tree/1.5.501"
             },
             "funding": [
                 {
@@ -11262,16 +11262,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "11.5.6",
+            "version": "11.5.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3c3ae14c90f244cdda95028c3e469028e8d1c02c"
+                "reference": "e1cb706f019e2547039ca2c839898cd5f557ee5d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3c3ae14c90f244cdda95028c3e469028e8d1c02c",
-                "reference": "3c3ae14c90f244cdda95028c3e469028e8d1c02c",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e1cb706f019e2547039ca2c839898cd5f557ee5d",
+                "reference": "e1cb706f019e2547039ca2c839898cd5f557ee5d",
                 "shasum": ""
             },
             "require": {
@@ -11343,7 +11343,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.6"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.7"
             },
             "funding": [
                 {
@@ -11359,7 +11359,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-01-31T07:03:30+00:00"
+            "time": "2025-02-06T16:10:05+00:00"
         },
         {
             "name": "roave/better-reflection",
@@ -12410,7 +12410,7 @@
         },
         {
             "name": "survos/deployment-bundle",
-            "version": "1.5.500",
+            "version": "1.5.501",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosDeploymentBundle.git",
@@ -12457,7 +12457,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/SurvosDeploymentBundle/issues",
-                "source": "https://github.com/survos/SurvosDeploymentBundle/tree/1.5.500"
+                "source": "https://github.com/survos/SurvosDeploymentBundle/tree/1.5.501"
             },
             "funding": [
                 {
@@ -12469,16 +12469,16 @@
         },
         {
             "name": "survos/maker-bundle",
-            "version": "1.5.500",
+            "version": "1.5.501",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosMakerBundle.git",
-                "reference": "636a33ed3fb26b4c5554236b16165a3baad42fb1"
+                "reference": "83cf7bcbd5b4c2535dc8035b21d810ee5f5a2d8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/SurvosMakerBundle/zipball/636a33ed3fb26b4c5554236b16165a3baad42fb1",
-                "reference": "636a33ed3fb26b4c5554236b16165a3baad42fb1",
+                "url": "https://api.github.com/repos/survos/SurvosMakerBundle/zipball/83cf7bcbd5b4c2535dc8035b21d810ee5f5a2d8b",
+                "reference": "83cf7bcbd5b4c2535dc8035b21d810ee5f5a2d8b",
                 "shasum": ""
             },
             "require": {
@@ -12567,12 +12567,13 @@
             "description": "Tools to generate controllers and templates for the admin interface",
             "keywords": [
                 "crud",
+                "dev",
                 "generator",
                 "symfony"
             ],
             "support": {
                 "issues": "https://github.com/survos/SurvosMakerBundle/issues",
-                "source": "https://github.com/survos/SurvosMakerBundle/tree/1.5.500"
+                "source": "https://github.com/survos/SurvosMakerBundle/tree/1.5.501"
             },
             "funding": [
                 {
@@ -12580,7 +12581,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-01T23:08:31+00:00"
+            "time": "2025-02-06T17:13:43+00:00"
         },
         {
             "name": "symfony/browser-kit",
