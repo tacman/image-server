@@ -69,6 +69,7 @@ class ApiController extends AbstractController
     #[Route('/dispatch_process.{_format}', name: 'app_dispatch_process', methods: ['POST'])]
     public function dispatchProcess(
         #[MapRequestPayload] ProcessPayload $payload,
+        string $_format='json'
     ): JsonResponse
     {
         foreach ($payload->images as $image) {

@@ -11,9 +11,10 @@
         <li>
             {{ row.originalUrl }} (Original size: {{ (row.size/1024)|number_format(1) }}k)
             {% for filter, size in row.filters %}
+{#                {{ dump(size) }}#}
                 {% set thumb = row.path|survos_image_filter(filter) %}
                 <img src="{{ thumb }}" alt="{{ thumb }}"/>
-                {{ filter }} ({{ (size/1024)|number_format(1) }}k)
+{#                {{ filter }} ({{ (size/1024)|number_format(1) }}k)#}
 
             {% endfor %}
         </li>
