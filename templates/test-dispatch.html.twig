@@ -1,6 +1,11 @@
 {% extends 'layout.html.twig' %}
 
 {% block body %}
+    {{ form_start(form) }}
+    {{ form_rest(form) }}
+
+    <input type="submit" value="POST">
+    {{ form_end(form) }}
     {% for results in results %}
         {{ dump(result) }}
     {% endfor %}
