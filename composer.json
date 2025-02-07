@@ -32,7 +32,7 @@
         "survos/sais-bundle": "^1.5.501",
         "survos/simple-datatables-bundle": "^1.5.501",
         "survos/storage-bundle": "^1.5.501",
-        "survos/workflow-helper-bundle": "*",
+        "survos/workflow-helper-bundle": ">=1.5.501",
         "symfony/amqp-messenger": "^7.2.3",
         "symfony/asset": "^7.2",
         "symfony/asset-mapper": "^7.2.3",

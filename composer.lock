@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fd0a595407bf636ee111e328c1175eed",
+    "content-hash": "ad71af62b880b2927d7eaa2073eb0f73",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3862,12 +3862,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/blacklist-bundle.git",
-                "reference": "f6423c08cd5e8c017375e1cc76158adc8e44a13d"
+                "reference": "2966b50a4500f1fcbf16d7d704e1ae76218e2154"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/blacklist-bundle/zipball/f6423c08cd5e8c017375e1cc76158adc8e44a13d",
-                "reference": "f6423c08cd5e8c017375e1cc76158adc8e44a13d",
+                "url": "https://api.github.com/repos/survos/blacklist-bundle/zipball/2966b50a4500f1fcbf16d7d704e1ae76218e2154",
+                "reference": "2966b50a4500f1fcbf16d7d704e1ae76218e2154",
                 "shasum": ""
             },
             "require": {
@@ -3920,7 +3920,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-07T11:04:31+00:00"
+            "time": "2025-02-07T15:46:34+00:00"
         },
         {
             "name": "survos/bootstrap-bundle",
