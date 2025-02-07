@@ -44,11 +44,12 @@ class ApiController extends AbstractController
     }
 
     #[Route('/test-dispatch', name: 'test_dispatch')]
+    #[Template('test-dispatch.html.twig')]
     public function testDispatch(
         UrlGeneratorInterface $urlGenerator,
         ApiController $apiController,
         Request $request
-    ): Response
+    ): Response|array
     {
         $callbackUrl = $urlGenerator->generate('handle_image_resize');
         $processPayload = new ProcessPayload([
@@ -57,13 +58,18 @@ class ApiController extends AbstractController
         ], [
             'thumb','medium'
         ], $callbackUrl);
-        $form = $this->createForm(ProcessPayloadType::class);
+        $form = $this->createForm(ProcessPayloadType::class, $processPayload);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // get the payload
             $payload = $form->getData();
             $response = $apiController->dispatchProcess($payload);
         }
+
+        return [
+            'form' => $form->createView(),
+            'results' => $response??[]
+        ];
     }
 
     #[Route('/dispatch_process.{_format}', name: 'app_dispatch_process', methods: ['POST'])]
@@ -72,17 +78,14 @@ class ApiController extends AbstractController
         string $_format='json'
     ): JsonResponse
     {
-        foreach ($payload->images as $image) {
-
-        }
         $codes = [];
-        // urls? codes? paths?
-        foreach ($urls as $url) {
+        foreach ($payload->images as $url) {
             $code = SaisClientService::calculateCode(url: $url);
             if (!$media = $this->mediaRepository->find($code)) {
                 $media = new Media($code, originalUrl: $url);
                 $this->entityManager->persist($media);
             }
+            dd($media, $url, $code);
             $codes[] = $code;
             // or maybe an array?
             $response[] = [

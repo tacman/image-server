@@ -4,8 +4,8 @@ framework:
 
     # Note that the session will be started ONLY if you read or write from it.
     session: true
-    router:
-        default_uri: '%env(SAIS_API_ENDPOINT)%'
+#    router:
+#        default_uri: '%env(SAIS_API_ENDPOINT)%'
 
     #esi: true
     #fragments: true
