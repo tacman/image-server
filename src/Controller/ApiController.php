@@ -56,7 +56,7 @@ class ApiController extends AbstractController
             'https://cdn.dummyjson.com/products/images/beauty/Powder%20Canister/1.png',
             'https://cdn.dummyjson.com/products/images/beauty/Red%20Nail%20Polish/1.png'
         ], [
-            'thumb','medium'
+            'tiny','small', 'medium'
         ], $callbackUrl);
         $form = $this->createForm(ProcessPayloadType::class, $processPayload);
         $form->handleRequest($request);
@@ -64,11 +64,12 @@ class ApiController extends AbstractController
             // get the payload
             $payload = $form->getData();
             $response = $apiController->dispatchProcess($payload);
+            $results = json_decode($response->getContent());
         }
 
         return [
             'form' => $form->createView(),
-            'results' => $response??[]
+            'results' => $results??[]
         ];
     }
 
@@ -85,7 +86,6 @@ class ApiController extends AbstractController
                 $media = new Media($code, originalUrl: $url);
                 $this->entityManager->persist($media);
             }
-            dd($media, $url, $code);
             $codes[] = $code;
             // or maybe an array?
             $response[] = [
@@ -101,9 +101,9 @@ class ApiController extends AbstractController
         foreach ($listing as $media) {
             // depending on the marking/filter status, dispatch
             $envelope = $this->messageBus->dispatch(new DownloadImage($url,
-                $code,
-                $filters,
-                $callbackUrl));
+                $media->getCode(),
+                $payload->filters,
+                $payload->callbackUrl));
         }
 
         return $this->json($listing);
@@ -119,6 +119,7 @@ class ApiController extends AbstractController
         #[MapQueryParameter] ?string $callbackUrl=null
     ): JsonResponse
     {
+        assert(false, "@todo: payload");
         if ($request->getMethod() === Request::METHOD_POST) {
             $urls = $request->request->get('urls', []);
         }

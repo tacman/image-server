@@ -7,12 +7,17 @@ final class DownloadImage
 
      public function __construct(
          private readonly string $url,
-         private ?string $code=null,
+         private ?string $code=null, // media code, not file code
          private readonly array $filters=[],
          private readonly ?string $callbackUrl=null,
          private readonly ?string $proxy='127.0.0.1:7080',
      ) {
      }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
 
     public function getFilters(): array
     {

@@ -12,10 +12,10 @@ class Media
 {
 
 
-    #[ORM\Column(length: 16)]
+    #[ORM\Column(length: 16, nullable: true)]
     private ?string $mimeType = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $size = null;
 
     #[ORM\Column(nullable: true)]
@@ -28,9 +28,9 @@ class Media
         #[ORM\Id]
         #[ORM\Column(length: 255)]
         private ?string $code=null,
-        #[ORM\Column(length: 255)]
+        #[ORM\Column(length: 255, nullable: true)]
         private ?string $path=null,
-        #[ORM\Column(type: Types::TEXT)]
+        #[ORM\Column(type: Types::TEXT, nullable: true)]
         private ?string $originalUrl=null
     )
     {

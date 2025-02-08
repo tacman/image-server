@@ -84,8 +84,8 @@ class ApiService
         $request = $this->httpClient->request('GET', $cachedUrl);
         $headers = $request->getHeaders();
         /** @var Media $media */
-        $media = $this->mediaRepository->findOneBy(['path' => $path]);
-        assert($media, "No media for $path");
+        $media = $this->mediaRepository->findOneBy(['code' => $message->getCode()]);
+        assert($media, "No media for $path / " . $message->getCode());
         $size = (int)$headers['content-length'][0];
         $media->addFilter($filter, $size, $url);
 
@@ -136,8 +136,9 @@ class ApiService
 
         // @todo: filters, dispatch a synced message since we're in the download
         foreach ($message->getFilters() as $filter) {
+            // sync because we're already inside of a message, though we could distribute these
             $this->messageBus->dispatch(
-                new ResizeImageMessage($filter, $path),
+                new ResizeImageMessage($filter, $path, code: $code),
                 stamps: [
                     new TransportNamesStamp('sync')
                 ]
