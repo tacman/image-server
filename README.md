@@ -11,6 +11,9 @@ The workflow.
 
 Applications are required to maintain a thumbnail status, which the image server gives to them in a callback. If the filter exists then the image can be called.
 
+Also tests bad-bot, key-value.  
+
+
 ```bash
 bin/console survos:image:upload --url=https://pictures.com/abc.jpg
 bin/console survos:image:upload --path=photos/def.jpg
