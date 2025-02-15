@@ -15,7 +15,7 @@ framework:
             timeout: 30
             proxy: '%env(HTTP_PROXY)%'
 
-#    error_controller: App\Controller\ErrorController::show
+    error_controller: App\Controller\ErrorController::show
 
 when@test:
     framework:
