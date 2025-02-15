@@ -51,8 +51,10 @@ class ApiController extends AbstractController
         Request $request
     ): Response|array
     {
-        $callbackUrl = $urlGenerator->generate('handle_image_resize');
-        $processPayload = new ProcessPayload([
+        $callbackUrl = $urlGenerator->generate('handle_image_resize', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $processPayload = new ProcessPayload(
+            'test',
+            [
             'https://cdn.dummyjson.com/products/images/beauty/Powder%20Canister/1.png',
             'https://cdn.dummyjson.com/products/images/beauty/Red%20Nail%20Polish/1.png'
         ], [
@@ -64,6 +66,7 @@ class ApiController extends AbstractController
             // get the payload
             $payload = $form->getData();
             $response = $apiController->dispatchProcess($payload);
+            dd($response);
             $results = json_decode($response->getContent());
         }
 
@@ -79,10 +82,14 @@ class ApiController extends AbstractController
         string $_format='json'
     ): JsonResponse
     {
+        dd($payload);
         $codes = [];
         foreach ($payload->images as $url) {
+
             $code = SaisClientService::calculateCode(url: $url);
-            if (!$media = $this->mediaRepository->find($code)) {
+            if (!$media = $this->mediaRepository->findOneBy(
+                ['code' => $code, 'root' => $payload->root]
+            )) {
                 $media = new Media($code, originalUrl: $url);
                 $this->entityManager->persist($media);
             }

@@ -99,8 +99,8 @@
     "pierstoval/smoke-testing": {
         "version": "v1.1.1"
     },
-    "survos/blacklist-bundle": {
-        "version": "dev-master"
+    "survos/bad-bot-bundle": {
+        "version": "0.1"
     },
     "survos/bootstrap-bundle": {
         "version": "1.5.418"
@@ -110,6 +110,9 @@
     },
     "survos/deployment-bundle": {
         "version": "1.5.418"
+    },
+    "survos/key-value-bundle": {
+        "version": "1.5.241"
     },
     "survos/maker-bundle": {
         "version": "1.5.418"

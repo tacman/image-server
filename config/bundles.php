@@ -28,7 +28,8 @@ return [
     Bizkit\VersioningBundle\BizkitVersioningBundle::class => ['all' => true],
     Survos\DeploymentBundle\SurvosDeploymentBundle::class => ['dev' => true],
     Inspector\Symfony\Bundle\InspectorBundle::class => ['all' => true],
-    LSBProject\BlacklistBundle\LSBProjectBlacklistBundle::class => ['all' => true],
     Pierstoval\SmokeTesting\SmokeTestingBundle::class => ['dev' => true, 'test' => true],
     Survos\WorkflowBundle\SurvosWorkflowBundle::class => ['all' => true],
+    Survos\KeyValueBundle\SurvosKeyValueBundle::class => ['all' => true],
+    Survos\BadBotBundle\SurvosBadBotBundle::class => ['all' => true],
 ];

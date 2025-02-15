@@ -25,6 +25,9 @@ class Media
      * @param string|null $path
      */
     public function __construct(
+        #[ORM\Column(length: 32, nullable: false)]
+        private string $root,
+
         #[ORM\Id]
         #[ORM\Column(length: 255)]
         private ?string $code=null,
@@ -34,8 +37,9 @@ class Media
         private ?string $originalUrl=null
     )
     {
+        // cannot change the root, since it creates the file in storage there.  Code is also based on it.
         if ($this->originalUrl && !$this->code) {
-            $this->code = SaisClientService::calculateCode(url: $this->originalUrl);
+            $this->code = SaisClientService::calculateCode(url: $this->originalUrl . $this->root);
 
         }
     }

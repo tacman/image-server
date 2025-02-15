@@ -5,8 +5,10 @@
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          backupGlobals="false"
          colors="true"
+         testdox="true"
+         stopOnFailure="true"
          bootstrap="tests/bootstrap.php"
-         convertDeprecationsToExceptions="false"
+         stopOnDeprecation="true"
 >
     <php>
         <ini name="display_errors" value="1" />
@@ -26,15 +28,6 @@
         </testsuite>
     </testsuites>
 
-    <coverage processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">src</directory>
-        </include>
-    </coverage>
-
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-    </listeners>
 
     <extensions>
     </extensions>
