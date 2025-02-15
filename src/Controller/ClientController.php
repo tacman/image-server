@@ -30,42 +30,7 @@ class ClientController extends AbstractController
     {
         return ['rows' => $mediaRepository->findBy([], ['path' => 'DESC'], 30)];
     }
-//
-//    #[Route('/test-dispatch', name: 'app_test_dispatch')]
-//    #[Template('test-dispatch.html.twig')]
-//    public function testDispatch(
-//        Request $request,
-//        SaisClientService $saisService,
-//    ): array|Response
-//    {
-//
-//        $payload = new ProcessPayload();
-//        $form = $this->createForm(ProcessPayloadType::class);
-//        $response  = $saisService->fetch('/status');
-//        $data = json_decode(file_get_contents('https://dummyjson.com/products'));
-//        $results = [];
-//        foreach ($data->products as $product) {
-//            foreach ($product->images as $image) {
-//                $images[] = $image;
-//            }
-//            $payload = new ProcessPayload($images, ['small']);
-//            $results[] =
-//                [
-//                    'payload' => $payload,
-//                    'response' => $saisService->dispatchProcess($payload)
-//                ];
-//        }
-//        $form = $this->createForm(ProcessPayloadType::class, $payload);
-//        $form->handleRequest($request);
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $results = $saisService->dispatchProcess($payload);
-//            dd($results);
-//        }
-//        return [
-//            'results' => $results,
-//            'form' => $form->createView()
-//            ];
-//    }
+
 
     // https://insight.symfony.com/docs/notifications/custom-webhook.html
     // https://medium.com/@skowron.dev/discovering-symfonys-secret-weapon-the-ultimate-guide-to-the-webhook-component-bae1449f4504

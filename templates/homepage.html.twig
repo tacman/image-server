@@ -1,48 +1,45 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <h1>Survos Image Resizing Server</h1>
+<h1>Survos Image Resizing Server</h1>
 
-    <div>
-        This server manages the resizing for all images, including museado.org
+<div>
+    This server manages the resizing for all images, including museado.org
+</div>
+
+{% for row in rows %}
+<li>
+    <h4>{{ row.originalUrl }} (Original size: {{ (row.size/1024)|number_format(1) }}k)</h4>
+
+    <div class="row">
+        {% for filter, size in row.filters %}
+        <div class="col-md-4">
+
+            {% set thumb = row.path|survos_image_filter(filter) %}
+            <img style="width: 300px" src="{{ thumb }}" alt="{{ thumb }}"/>
+            <div class="d-flex align-items-center">
+                <div>
+                    <span>{{ filter }}
+                    </span>
+                    {% set percentage = (100 * size.size / row.size)|number_format(3) %}
+                    <span class="text-secondary">{{ (size.size/1024)|number_format(1) }}K
+                        {{ percentage }}%
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
     </div>
-
-    {% for row in rows %}
-        <li>
-            {{ row.originalUrl }} (Original size: {{ (row.size/1024)|number_format(1) }}k)
-            {% for filter, size in row.filters %}
-{#                {{ dump(size) }}#}
-                {% set thumb = row.path|survos_image_filter(filter) %}
-                <img src="{{ thumb }}" alt="{{ thumb }}"/>
-{#                {{ filter }} ({{ (size/1024)|number_format(1) }}k)#}
-
-            {% endfor %}
-        </li>
-    {% endfor %}
+</li>
+{% endfor %}
 
     {% set belvedereUrl = 'https://sammlung.belvedere.at/internal/media/downloaddispatcher/130189?download=' %}
     {% set waltersUrl = 'https://art.thewalters.org/images/art/PS1_54.975_Fnt_DD_T08.jpg' %}
     {% set webhook = url('app_webhook') %}
-    <a href="{{ webhook }}" target="_blank">
-        {{ webhook }}
-    </a>
+<a href="{{ webhook }}" target="_blank">
+    Webhook as GET {{ webhook }}
+</a>
 
 
-    <a href="{{ path('app_dispatch_process', {
-        urls: [waltersUrl],
-        callbackUrl: webhook
-    }) }}"
-       target="_blank"
-    >
-        <button>Raw Dispatch</button>
-    </a>
-
-    <a href="{{ path('app_request_filter', {
-        filter: 'small',
-        url: waltersUrl
-    }) }}"
-       target="_blank"
-    >
-        Request resize
-    </a>
 {% endblock %}

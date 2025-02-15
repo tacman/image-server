@@ -24,12 +24,11 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class ApiController extends AbstractController
+class ApiController extends AbstractController implements TokenAuthenticatedController
 {
 
     public function __construct(
         private MessageBusInterface $messageBus,
-        private ApiService          $apiService,
         private MediaRepository     $mediaRepository,
         private EntityManagerInterface $entityManager,
     )
@@ -40,14 +39,14 @@ class ApiController extends AbstractController
     #[Route('/handle_image_resize', name: 'handle_image_resize')]
     public function handleResizeImage(Request $request): Response
     {
+        dd();
         return $this->json(['status' => 'ok']);
     }
 
-    #[Route('/test-dispatch', name: 'test_dispatch')]
+    #[Route('/ui/dispatch_process', name: 'app_dispatch_process_ui', methods: ['POST', 'GET'])]
     #[Template('test-dispatch.html.twig')]
     public function testDispatch(
         UrlGeneratorInterface $urlGenerator,
-        ApiController $apiController,
         Request $request
     ): Response|array
     {
@@ -62,11 +61,11 @@ class ApiController extends AbstractController
         ], $callbackUrl);
         $form = $this->createForm(ProcessPayloadType::class, $processPayload);
         $form->handleRequest($request);
+        // @todo: validate the API key
         if ($form->isSubmitted() && $form->isValid()) {
             // get the payload
             $payload = $form->getData();
-            $response = $apiController->dispatchProcess($payload);
-            dd($response);
+            $response = $this->dispatchProcess($payload);
             $results = json_decode($response->getContent());
         }
 
@@ -82,7 +81,6 @@ class ApiController extends AbstractController
         string $_format='json'
     ): JsonResponse
     {
-        dd($payload);
         $codes = [];
         foreach ($payload->images as $url) {
 
@@ -90,7 +88,7 @@ class ApiController extends AbstractController
             if (!$media = $this->mediaRepository->findOneBy(
                 ['code' => $code, 'root' => $payload->root]
             )) {
-                $media = new Media($code, originalUrl: $url);
+                $media = new Media(root: $payload->root, code: $code, originalUrl: $url);
                 $this->entityManager->persist($media);
             }
             $codes[] = $code;
@@ -108,6 +106,7 @@ class ApiController extends AbstractController
         foreach ($listing as $media) {
             // depending on the marking/filter status, dispatch
             $envelope = $this->messageBus->dispatch(new DownloadImage($url,
+                $media->getRoot(),
                 $media->getCode(),
                 $payload->filters,
                 $payload->callbackUrl));

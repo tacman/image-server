@@ -26,15 +26,15 @@ class Media
      */
     public function __construct(
         #[ORM\Column(length: 32, nullable: false)]
-        private string $root,
+        private readonly string $root,
 
         #[ORM\Id]
         #[ORM\Column(length: 255)]
-        private ?string $code=null,
+        private ?string         $code=null,
         #[ORM\Column(length: 255, nullable: true)]
-        private ?string $path=null,
+        private ?string         $path=null,
         #[ORM\Column(type: Types::TEXT, nullable: true)]
-        private ?string $originalUrl=null
+        private ?string         $originalUrl=null
     )
     {
         // cannot change the root, since it creates the file in storage there.  Code is also based on it.
@@ -42,6 +42,11 @@ class Media
             $this->code = SaisClientService::calculateCode(url: $this->originalUrl . $this->root);
 
         }
+    }
+
+    public function getRoot(): string
+    {
+        return $this->root;
     }
 
 

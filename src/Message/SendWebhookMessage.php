@@ -8,7 +8,7 @@ final class SendWebhookMessage
 {
 
      public function __construct(
-         private string $callbackUrl,
+         private ?string $callbackUrl,
          private array $data
      ) {
      }

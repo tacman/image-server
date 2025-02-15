@@ -1,6 +1,10 @@
-{% extends 'layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
+
+    <h1>
+        Test posting to {{ path('app_dispatch_process') }}
+    </h1>
     {{ form_start(form) }}
     {{ form_rest(form) }}
 

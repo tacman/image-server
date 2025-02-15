@@ -62,7 +62,6 @@
         "symfony/string": "^7.2",
         "symfony/translation": "^7.2.2",
         "symfony/twig-bundle": "^7.2",
-        "symfony/ux-turbo": "^2.23.0",
         "symfony/validator": "^7.2.3",
         "symfony/web-link": "^7.2",
         "symfony/yaml": "^7.2.3",

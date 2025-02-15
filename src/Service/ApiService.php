@@ -113,12 +113,16 @@ class ApiService
     public function onDownloadImage(DownloadImage $message): void
     {
         $url = $message->getUrl();
+        // smell test...
         $code = SaisClientService::calculateCode(url: $url);
-        $path = SaisClientService::calculatePath($code);
+        $path = $message->getRoot() . '/' . SaisClientService::calculatePath($code);
         $tempFile = SaisClientService::calculateCode($url); // no dirs
+
         if (!file_exists($tempFile)) {
             $this->downloadUrl($url, $tempFile);
         }
+
+
         assert(file_exists($tempFile));
         $mimeType = mime_content_type($tempFile);
         $ext = pathinfo($url, PATHINFO_EXTENSION);
@@ -131,6 +135,7 @@ class ApiService
         } else {
             $this->logger->info("$url already exists as  $path");
         }
+
         // update the database with the downloaded file
         $media = $this->updateDatabase($code, $path, $mimeType, $url, filesize($tempFile));
 
@@ -197,8 +202,10 @@ class ApiService
 
     private function dispatchWebhook(?string $callbackUrl, Media $media): void
     {
-        $content = $this->normalizer->normalize($media);
-        $this->messageBus->dispatch( new SendWebhookMessage($callbackUrl, $content) );
+        if ($callbackUrl) {
+            $content = $this->normalizer->normalize($media);
+            $this->messageBus->dispatch( new SendWebhookMessage($callbackUrl, $content) );
+        }
     }
 
     #[AsMessageHandler()]
@@ -228,6 +235,7 @@ class ApiService
             $this->entityManager->persist($media);
         }
         $media
+            ->setPath($path)
             ->setOriginalUrl($url)
             ->setMimeType($mimeType)
             ->setSize($size);

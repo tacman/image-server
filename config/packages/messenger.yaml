@@ -30,7 +30,7 @@ framework:
 #            Symfony\Component\Mailer\Messenger\SendEmailMessage: async
 #            Symfony\Component\Notifier\Message\ChatMessage: async
 #            Symfony\Component\Notifier\Message\SmsMessage: async
-            App\Message\ResizeImageMessage: sais
+#            App\Message\ResizeImageMessage: sais
             App\Message\SendWebhookMessage: low
 #            App\Message\DownloadImage: sais
 

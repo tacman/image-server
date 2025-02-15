@@ -43,6 +43,8 @@ final class AppMenu implements KnpMenuHelperInterface
     {
         $menu = $event->getMenu();
         $options = $event->getOptions();
+        $this->add($menu, 'app_homepage');
+        $this->add($menu, 'app_dispatch_process_ui');
         $this->add($menu, 'survos_storage_zones');
 
         //        $this->add($menu, 'app_homepage');

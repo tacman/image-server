@@ -20,6 +20,10 @@ class ProcessPayloadType extends AbstractType
                 'help' => 'root for file storage.',
                 'required' => true,
             ])
+            ->add('apiKey', TextType::class, [
+                'help' => 'api kep.',
+                'required' => false,
+            ])
             ->add('images', TextareaType::class, [
                 'attr' => [
                     'cols' => 80,
