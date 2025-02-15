@@ -12,6 +12,7 @@
         "ext-ctype": "*",
         "ext-fileinfo": "*",
         "ext-imagick": "*",
+        "ext-intl": "*",
         "ext-mbstring": "*",
         "ext-pdo_pgsql": "*",
         "ext-redis": "*",
@@ -28,9 +29,9 @@
         "paragonie/sodium_compat": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.6.1",
         "phpstan/phpdoc-parser": "^2.0.1",
-        "survos/bad-bot-bundle": ">=0.1",
+        "survos/bad-bot-bundle": "dev-main",
         "survos/bootstrap-bundle": "^1.5.504",
-        "survos/key-value-bundle": ">=1.5.241",
+        "survos/key-value-bundle": "dev-main",
         "survos/sais-bundle": "^1.5.504",
         "survos/simple-datatables-bundle": "^1.5.504",
         "survos/storage-bundle": "^1.5.504",
@@ -125,7 +126,7 @@
     "require-dev": {
         "maximebf/debugbar": "^2.1.1",
         "phpunit/phpunit": "^11.5.7",
-        "pierstoval/smoke-testing": "*@dev",
+        "pierstoval/smoke-testing": ">=1.2@dev",
         "survos/deployment-bundle": "^1.5.504",
         "survos/maker-bundle": "^1.5.504",
         "symfony/browser-kit": "^7.2",
@@ -135,11 +136,5 @@
         "symfony/phpunit-bridge": "^7.2",
         "symfony/stopwatch": "^7.2.2",
         "symfony/web-profiler-bundle": "^7.2.3"
-    },
-    "repositories": {
-        "smoke": {
-            "type": "path",
-            "url": "~/g/tacman/SmokeTesting"
-        }
     }
 }
