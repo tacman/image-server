@@ -14,8 +14,13 @@ framework:
             max_redirects: 8
             timeout: 30
             proxy: '%env(HTTP_PROXY)%'
+
+    error_controller: App\Controller\ErrorController::show
+
 when@test:
     framework:
         test: true
         session:
             storage_factory_id: session.storage.factory.mock_file
+
+
