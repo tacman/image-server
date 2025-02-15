@@ -13,6 +13,11 @@ survos_key_value:
             type:                 string # @todo: add regex type
 
         -
+            name:                 paths # tracking only
+            case:                 true
+            type:                 string
+
+        -
             name:                 ips
             case:                 true
             type:                 string # @todo: add ip type
