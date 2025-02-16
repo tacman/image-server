@@ -3,13 +3,20 @@
 namespace App\Entity;
 
 use App\Repository\MediaRepository;
+use App\Workflow\IMediaWorkflow;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\SaisBundle\Service\SaisClientService;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Survos\WorkflowBundle\Traits\MarkingInterface;
+use Survos\WorkflowBundle\Traits\MarkingTrait;
+
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
-class Media
+class Media implements MarkingInterface, \Stringable
 {
+    use MarkingTrait;
 
 
     #[ORM\Column(length: 16, nullable: true)]
@@ -28,6 +35,18 @@ class Media
     #[ORM\Column(nullable: true)]
     #[Gedmo\Timestampable(on:"update")]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    /**
+     * @var Collection<int, Resized>
+     */
+    #[ORM\OneToMany(targetEntity: Resized::class, mappedBy: 'media', orphanRemoval: true)]
+    private Collection $resizedImages;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $blur = null;
+
+    #[ORM\Column(nullable: true, options: ['jsonb' => true])]
+    private ?array $blurData = null;
 
     /**
      * @param string|null $path
@@ -50,6 +69,8 @@ class Media
             $this->code = SaisClientService::calculateCode(url: $this->originalUrl . $this->root);
 
         }
+        $this->resizedImages = new ArrayCollection();
+        $this->marking = IMediaWorkflow::PLACE_NEW;
     }
 
     public function getRoot(): string
@@ -164,6 +185,65 @@ class Media
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Resized>
+     */
+    public function getResizedImages(): Collection
+    {
+        return $this->resizedImages;
+    }
+
+    public function addResizedImage(Resized $resizedImage): static
+    {
+        if (!$this->resizedImages->contains($resizedImage)) {
+            $this->resizedImages->add($resizedImage);
+            $resizedImage->setMedia($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResizedImage(Resized $resizedImage): static
+    {
+        if ($this->resizedImages->removeElement($resizedImage)) {
+            // set the owning side to null (unless already changed)
+            if ($resizedImage->getMedia() === $this) {
+                $resizedImage->setMedia(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getCode();
+    }
+
+    public function getBlur(): ?string
+    {
+        return $this->blur;
+    }
+
+    public function setBlur(?string $blur): static
+    {
+        $this->blur = $blur;
+
+        return $this;
+    }
+
+    public function getBlurData(): ?array
+    {
+        return $this->blurData;
+    }
+
+    public function setBlurData(?array $blurData): static
+    {
+        $this->blurData = $blurData;
 
         return $this;
     }

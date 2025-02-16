@@ -8,9 +8,12 @@ use App\Message\DownloadImage;
 use App\Message\ResizeImageMessage;
 use App\Repository\MediaRepository;
 use App\Service\ApiService;
+use App\Workflow\IMediaWorkflow;
+use App\Workflow\MediaWorkflow;
 use Doctrine\ORM\EntityManagerInterface;
 use Survos\SaisBundle\Model\ProcessPayload;
 use Survos\SaisBundle\Service\SaisClientService;
+use Survos\WorkflowBundle\Message\AsyncTransitionMessage;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -75,6 +78,17 @@ class ApiController extends AbstractController implements TokenAuthenticatedCont
         ];
     }
 
+    /**
+     * When a request comes in, populate the media database and return what we know of media.
+     * Dispatch download.
+     * After download, dispatch resize
+     * @todo: handle tasks, which should be batched and recorded
+     *
+     * @param ProcessPayload $payload
+     * @param string $_format
+     * @return JsonResponse
+     * @throws \Symfony\Component\Messenger\Exception\ExceptionInterface
+     */
     #[Route('/dispatch_process.{_format}', name: 'app_dispatch_process', methods: ['POST'])]
     public function dispatchProcess(
         #[MapRequestPayload] ProcessPayload $payload,
@@ -92,11 +106,6 @@ class ApiController extends AbstractController implements TokenAuthenticatedCont
                 $this->entityManager->persist($media);
             }
             $codes[] = $code;
-            // or maybe an array?
-            $response[] = [
-                'code' => $code,
-                'url' => $url
-                ];
         }
         $this->entityManager->flush();
 
@@ -104,13 +113,15 @@ class ApiController extends AbstractController implements TokenAuthenticatedCont
 
         $listing = $this->mediaRepository->findBy(['code' => $codes]);
         foreach ($listing as $media) {
-            // depending on the marking/filter status, dispatch
-            $envelope = $this->messageBus->dispatch(new DownloadImage($url,
-                $media->getRoot(),
+            // instead of dispatching directly here, dispatch a transition
+            $envelope = $this->messageBus->dispatch(new AsyncTransitionMessage(
                 $media->getCode(),
-                $payload->filters,
-                $payload->callbackUrl));
-            dump($envelope);
+                Media::class,
+                IMediaWorkflow::TRANSITION_DOWNLOAD,
+                workflow: MediaWorkflow::WORKFLOW_NAME,
+                context: ['liip' => $payload->filters]
+            ));
+
         }
 
         return $this->json($listing);

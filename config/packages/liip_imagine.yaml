@@ -40,7 +40,7 @@ liip_imagine:
         tiny:
             filters:
                 thumbnail:
-                    size:          [120, 120]
+                    size:          [100, 100]
 #                    allow_upscale: true
                     mode: inset
 

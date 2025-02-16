@@ -32,4 +32,8 @@ return [
     Survos\KeyValueBundle\SurvosKeyValueBundle::class => ['all' => true],
     Survos\BadBotBundle\SurvosBadBotBundle::class => ['all' => true],
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
+    Nelmio\CorsBundle\NelmioCorsBundle::class => ['all' => true],
+    ApiPlatform\Symfony\Bundle\ApiPlatformBundle::class => ['all' => true],
+    Survos\CommandBundle\SurvosCommandBundle::class => ['all' => true],
+    Survos\ThumbHashBundle\SurvosThumbHashBundle::class => ['all' => true],
 ];

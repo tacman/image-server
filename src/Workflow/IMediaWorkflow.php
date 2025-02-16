@@ -2,22 +2,25 @@
 
 namespace App\Workflow;
 
+use Survos\WorkflowBundle\Attribute\Place;
 use Survos\WorkflowBundle\Attribute\Transition;
-
-// See events at https://symfony.com/doc/current/workflow.html#using-events
 
 interface IMediaWorkflow
 {
-    // This name is used for injecting the workflow into a service
-    // #[Target(IMediaWorkflow::WORKFLOW_NAME)] private WorkflowInterface $workflow
-    public const WORKFLOW_NAME = 'MediaWorkflow';
+	public const WORKFLOW_NAME = 'MediaWorkflow';
 
-    public const PLACE_NEW = 'new';
-    public const PLACE_DOWNLOADED = 'downloaded';
-    public const PLACE_RESIZED = 'resized';
+	#[Place(initial: true)]
+	public const PLACE_NEW = 'new';
 
-    #[Transition([self::PLACE_NEW], self::PLACE_NEW)]
-    public const TRANSITION_DOWNLOAD = 'download';
-    #[Transition([self::PLACE_DOWNLOADED], self::PLACE_DOWNLOADED)]
-    public const TRANSITION_RESIZE = 'resize';
+	#[Place]
+	public const PLACE_DOWNLOADED = 'downloaded';
+
+	#[Place]
+	public const PLACE_RESIZED = 'resized';
+
+	#[Transition(from: [self::PLACE_NEW, self::PLACE_DOWNLOADED], to: self::PLACE_DOWNLOADED)]
+	public const TRANSITION_DOWNLOAD = 'download';
+
+	#[Transition(from: [self::PLACE_DOWNLOADED], to: self::PLACE_RESIZED)]
+	public const TRANSITION_RESIZE = 'resize';
 }

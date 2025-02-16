@@ -2,6 +2,11 @@
 
 namespace App\Menu;
 
+use App\Entity\Img;
+use App\Entity\Inst;
+use App\Entity\Media;
+use App\Entity\Obj;
+use App\Entity\Resized;
 use Survos\BootstrapBundle\Event\KnpMenuEvent;
 use Survos\BootstrapBundle\Service\MenuService;
 use Survos\BootstrapBundle\Traits\KnpMenuHelperInterface;
@@ -46,6 +51,24 @@ final class AppMenu implements KnpMenuHelperInterface
         $this->add($menu, 'app_homepage');
         $this->add($menu, 'app_dispatch_process_ui');
         $this->add($menu, 'survos_storage_zones');
+        $this->add($menu, 'app_media');
+
+
+        if ($this->isEnv('dev')) {
+
+            $subMenu = $this->addSubmenu($menu, 'survos_commands');
+            $this->add($subMenu, 'survos_commands', label: 'All');
+            foreach (['workflow:iterate', 'init:md'] as $commandName) {
+                $this->add($subMenu, 'survos_command', ['commandName' => $commandName], $commandName);
+            }
+            $subMenu = $this->addSubmenu($menu, 'workflow:iterate');
+            foreach ([Media::class, Resized::class] as $className) {
+                $className = str_replace("\\", "\\\\", $className);
+                $this->add($subMenu, 'survos_command', ['commandName' => 'workflow:iterate', 'className' => $className], $className);
+            }
+            $this->add($subMenu, 'survos_workflows', label: 'Workflows');
+
+        }
 
         //        $this->add($menu, 'app_homepage');
         // for nested menus, don't add a route, just a label, then use it for the argument to addMenuItem
