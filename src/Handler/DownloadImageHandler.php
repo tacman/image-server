@@ -82,7 +82,7 @@ class DownloadImageHandler
         foreach ($message->getFilters() as $filter) {
             if (!$resized = $this->resizedRepository->findOneBy([
                 'media' => $media,
-                'limit' => $filter
+                'liipCode' => $filter
             ])) {
                 $resized = new Resized();
             }
