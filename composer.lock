@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc8a0d66ce4bc44b5ca5f400211bbe44",
+    "content-hash": "521cec05b0cf7155e6106cea9c2d304c",
     "packages": [
         {
             "name": "api-platform/doctrine-common",
@@ -5328,7 +5328,7 @@
         },
         {
             "name": "survos/bad-bot-bundle",
-            "version": "dev-main",
+            "version": "1.5.506",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/bad-bot-bundle.git",
@@ -5356,7 +5356,6 @@
                 "symfony/phpunit-bridge": "^6.4 || ^7.1",
                 "symfony/yaml": "^6.4 || ^7.1"
             },
-            "default-branch": true,
             "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
@@ -5710,7 +5709,7 @@
         },
         {
             "name": "survos/key-value-bundle",
-            "version": "dev-main",
+            "version": "1.5.506",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosKeyValueBundle.git",
@@ -5735,7 +5734,6 @@
                 "symfony/phpunit-bridge": "^6.4 || ^7.1",
                 "symfony/yaml": "^6.4 || ^7.1"
             },
-            "default-branch": true,
             "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
@@ -5980,7 +5978,7 @@
         },
         {
             "name": "survos/thumb-hash-bundle",
-            "version": "dev-main",
+            "version": "1.5.506",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/thumb-hash-bundle.git",
@@ -6011,7 +6009,6 @@
                 "symfony/twig-bundle": "^6.4 || ^7.1",
                 "symfony/var-dumper": "^6.4 || ^7.1"
             },
-            "default-branch": true,
             "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
@@ -15318,10 +15315,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "knplabs/knp-menu": 20,
-        "pierstoval/smoke-testing": 20,
-        "survos/bad-bot-bundle": 20,
-        "survos/key-value-bundle": 20,
-        "survos/thumb-hash-bundle": 20
+        "pierstoval/smoke-testing": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
