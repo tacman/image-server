@@ -12,7 +12,7 @@
         'dump'
     ] %}
     <twig:simple_datatables
-            :data="medias"
+            :data="rows"
             :caller="_self"
             :columns="columns"
     >
@@ -42,7 +42,7 @@
             {% endfor %}
         </twig:block>
         <twig:block name="dump">
-{#            {{ dump(row) }}#}
+            {{ dump(row) }}
         </twig:block>
 
     </twig:simple_datatables>

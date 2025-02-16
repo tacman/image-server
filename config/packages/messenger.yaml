@@ -39,7 +39,7 @@ framework:
 #            Symfony\Component\Notifier\Message\SmsMessage: async
 #            App\Message\ResizeImageMessage: resize
             App\Message\SendWebhookMessage: low
-#            App\Message\DownloadImage: sais
+            App\Message\DownloadImage: sais
 
             # Route your messages to the transports
             # 'App\Message\YourMessage': async

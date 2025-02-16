@@ -11,6 +11,7 @@ return static function (FrameworkConfig $framework) {
     if (class_exists(ConfigureFromAttributesService::class))
         foreach ([
                  \App\Workflow\MediaWorkflow::class,
+                 \App\Workflow\ResizedWorkflow::class,
                  ] as $workflowClass) {
             if (class_exists($workflowClass)) {
                 ConfigureFromAttributesService::configureFramework($workflowClass, $framework, [$workflowClass]);
