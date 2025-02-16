@@ -14,7 +14,7 @@
     <div class="row">
         {% for filter, size in row.filters %}
         <div class="col-md-4">
-
+            {% if row.path %}
             {% set thumb = row.path|survos_image_filter(filter) %}
             <img style="width: 300px" src="{{ thumb }}" alt="{{ thumb }}"/>
             <div class="d-flex align-items-center">
@@ -27,6 +27,7 @@
                     </span>
                 </div>
             </div>
+            {% endif %}
         </div>
         {% endfor %}
 

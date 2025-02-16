@@ -142,12 +142,13 @@ class ApiService
         // @todo: filters, dispatch a synced message since we're in the download
         foreach ($message->getFilters() as $filter) {
             // sync because we're already inside of a message, though we could distribute these
-            $this->messageBus->dispatch(
+            $envelope = $this->messageBus->dispatch(
                 new ResizeImageMessage($filter, $path, code: $code),
                 stamps: [
-                    new TransportNamesStamp('sync')
+                    new TransportNamesStamp('resize')
                 ]
             );
+            $this->logger->warning(sprintf('Resizing %s (%s)', $path, $filter));
         }
         // side effect of resize is that media is updated with the filter sized.
         $this->entityManager->flush();

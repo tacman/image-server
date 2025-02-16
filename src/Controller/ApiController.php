@@ -110,6 +110,7 @@ class ApiController extends AbstractController implements TokenAuthenticatedCont
                 $media->getCode(),
                 $payload->filters,
                 $payload->callbackUrl));
+            dump($envelope);
         }
 
         return $this->json($listing);

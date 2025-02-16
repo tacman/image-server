@@ -14,6 +14,13 @@ framework:
                 retry_strategy:
                     max_retries: 3
                     multiplier: 2
+            resize:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: resize
+                    queues:
+                        resize: ~
             high:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
             low:
@@ -30,9 +37,9 @@ framework:
 #            Symfony\Component\Mailer\Messenger\SendEmailMessage: async
 #            Symfony\Component\Notifier\Message\ChatMessage: async
 #            Symfony\Component\Notifier\Message\SmsMessage: async
-#            App\Message\ResizeImageMessage: sais
+            App\Message\ResizeImageMessage: resize
             App\Message\SendWebhookMessage: low
-#            App\Message\DownloadImage: sais
+            App\Message\DownloadImage: sais
 
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
