@@ -88,6 +88,7 @@ class ApiService
         assert($media, "No media for $path / " . $message->getCode());
         $size = (int)$headers['content-length'][0];
         $media->addFilter($filter, $size, $url);
+        $this->entityManager->flush();
 
     }
 

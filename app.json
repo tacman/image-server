@@ -7,7 +7,11 @@
     ],
     "cron": [
         {
-            "command": "bin/console mess:consume high  --time-limit 270",
+            "command": "bin/console mess:consume sais  --time-limit 270",
+            "schedule": "*/5 * * * *"
+        },
+        {
+            "command": "bin/console mess:consume resize  --time-limit 270",
             "schedule": "*/5 * * * *"
         }
     ],

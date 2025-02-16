@@ -6,7 +6,7 @@ use App\Repository\MediaRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\SaisBundle\Service\SaisClientService;
-
+use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
 class Media
 {
@@ -20,6 +20,14 @@ class Media
 
     #[ORM\Column(nullable: true)]
     private ?array $filters = null;
+
+    #[ORM\Column]
+    #[Gedmo\Timestampable(on:"create")]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Gedmo\Timestampable(on:"update")]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     /**
      * @param string|null $path
@@ -134,5 +142,29 @@ class Media
         $this->setFilters($filters);
         return $this;
 
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 }

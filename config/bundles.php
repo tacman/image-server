@@ -31,4 +31,5 @@ return [
     Survos\WorkflowBundle\SurvosWorkflowBundle::class => ['all' => true],
     Survos\KeyValueBundle\SurvosKeyValueBundle::class => ['all' => true],
     Survos\BadBotBundle\SurvosBadBotBundle::class => ['all' => true],
+    Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
 ];

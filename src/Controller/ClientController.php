@@ -28,7 +28,7 @@ class ClientController extends AbstractController
     #[Template('homepage.html.twig')]
     public function index(MediaRepository $mediaRepository): array
     {
-        return ['rows' => $mediaRepository->findBy([], ['path' => 'DESC'], 30)];
+        return ['rows' => $mediaRepository->findBy([], ['createdAt' => 'ASC'], 30)];
     }
 
 

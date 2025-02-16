@@ -9,7 +9,11 @@
 
 {% for row in rows %}
 <li>
-    <h4>{{ row.originalUrl }} (Original size: {{ (row.size/1024)|number_format(1) }}k)</h4>
+    <h4>
+        <a href="{{ row.originalUrl }}" target="_blank">
+            {{ row.originalUrl }}
+        </a>
+        (Original size: {{ (row.size/1024)|number_format(1) }}k)</h4>
 
     <div class="row">
         {% for filter, size in row.filters %}
