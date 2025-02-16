@@ -11,10 +11,11 @@
     <input type="submit" value="POST">
     {{ form_end(form) }}
     {% for result in results %}
-        {{ dump(result) }}
+        <li>
+            {{ result|json_pretty }}
+        </li>
     {% endfor %}
 
-    {{ dump(results) }}
 {% endblock %}
 
 {% block stylesheets %}
