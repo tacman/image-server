@@ -39,4 +39,7 @@ return [
         'version' => '9.2.1',
         'type' => 'css',
     ],
+    'thumbhash' => [
+        'version' => '0.1.1',
+    ],
 ];
