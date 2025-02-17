@@ -1,56 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MediaController!{% endblock %}
+{% block title %}Media index{% endblock %}
+
 
 {% block body %}
+    <h1>Media index</h1>
 
-    {% set columns = [
-        'root',
-        'code',
-        'originalUrl',
-        'marking',
-        'size',
-        'filters',
-        'dump'
-    ] %}
-    <twig:simple_datatables
-            :data="medias"
-            :caller="_self"
-            :columns="columns"
-    >
+    {% include "medium/_table.html.twig" %}
 
-        <twig:block name="originalUrl">
-            <a href="{{ row.originalUrl }}" target="_blank" title="{{ row.originalUrl }}">
-                {{ row.originalUrl }}
-            </a>
-        </twig:block>
-        <twig:block name="code">
-            {% set blurUrl =  blurUrl(row.blurData) %}
-
-            <a href="{{ row.originalUrl }}" target="_blank" title="{{ row.originalUrl }}">
-                <img src="{{ blurUrl }}" alt="{{ blurUrl }}" class="blur"/>
-                {{ row.code }}
-            </a>
-            <br/>{{ row.path }}
-        </twig:block>
-        <twig:block name="filters">
-{#            {{ dump(row.filters) }}#}
-            {% for resized in row.resizedImages %}
-                <li>
-                    {{ resized.liipCode }} / {{ resized.marking }}
-                    {% if resized.liipCode == 'tiny' %}
-                        {% if resized.url %}
-                            <a href="{{ row.originalUrl }}" target="_blank" title="{{ row.originalUrl }}">
-                                <img class="img-thumbnail" src="{{ resized.url }}" alt="{{ row.originalUrl }}"/>
-                            </a>
-                        {% endif %}
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </twig:block>
-        <twig:block name="dump">
-            {#            {{ dump(row) }} #}
-        </twig:block>
-
-    </twig:simple_datatables>
+    <a class="btn btn-primary" href="{{ path('media_new') }}"><span class="fas fa-plus"></span>New  Media</a>
 {% endblock %}

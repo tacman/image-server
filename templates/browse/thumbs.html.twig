@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MediaController!{% endblock %}
+{% block title %}Hello BrowseController!{% endblock %}
 
 {% block body %}
 
@@ -20,7 +20,9 @@
     >
         <twig:block name="id">
             {{ row.media.root }}
-            / {{ row.media.code }}
+            <a href="{{ path('media_show', row.media.rp) }}">
+                / {{ row.media.code }}
+            </a>
         </twig:block>
         <twig:block name="url">
             {% set url = row.url %}

@@ -1,0 +1,73 @@
+{% extends "media/base.html.twig" %}
+
+{% block body %}
+    <h1>Media</h1>
+
+    {% if workflowEnabled|default(true)  %}
+        Workflow: {{ media.workflowName }}
+
+        {{ include('@SurvosWorkflow/_entity_transitions.html.twig', {
+            transition_path: 'app_homepage',
+            flowName: media.workflowName,
+            entity: media
+        }) }}
+
+    {% endif %}
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>MimeType</th>
+                <td>{{ medium.mimeType }}</td>
+            </tr>
+            <tr>
+                <th>Size</th>
+                <td>{{ medium.size }}</td>
+            </tr>
+            <tr>
+                <th>thumbData</th>
+                <td>{{ medium.thumbData ? medium.thumbData|json_encode : '' }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ medium.createdAt ? medium.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ medium.updatedAt ? medium.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Blur</th>
+                <td>
+                    <img src="{{ medium.blur|blurUrl }}" />
+
+                </td>
+            </tr>
+            <tr>
+                <th>Root</th>
+                <td>{{ medium.root }}</td>
+            </tr>
+            <tr>
+                <th>Code</th>
+                <td>{{ medium.code }}</td>
+            </tr>
+            <tr>
+                <th>Path</th>
+                <td>{{ medium.path }}</td>
+            </tr>
+            <tr>
+                <th>OriginalUrl</th>
+                <td>{{ medium.originalUrl }}</td>
+            </tr>
+            <tr>
+                <th>Marking</th>
+                <td>{{ medium.marking }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+{% if is_granted('ROLE_ADMIN') %}
+    <a class="btn btn-primary" href="{{ path('media_edit', medium.rp) }}">edit</a>
+    {{ include('media/_delete_form.html.twig') }}
+{% endif %}
+{% endblock %}
