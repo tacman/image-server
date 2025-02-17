@@ -12,6 +12,7 @@ use Survos\SaisBundle\Service\SaisClientService;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Survos\WorkflowBundle\Traits\MarkingInterface;
 use Survos\WorkflowBundle\Traits\MarkingTrait;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
 class Media implements MarkingInterface, \Stringable
@@ -25,7 +26,8 @@ class Media implements MarkingInterface, \Stringable
     #[ORM\Column(nullable: true)]
     private ?int $size = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: true, options: ['jsonb' => true])]
+    #[Groups(['media.read'])]
     private ?array $filters = null;
 
     #[ORM\Column]
@@ -43,6 +45,7 @@ class Media implements MarkingInterface, \Stringable
     private Collection $resizedImages;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['media.read'])]
     private ?string $blur = null;
 
     #[ORM\Column(nullable: true, options: ['jsonb' => true])]
@@ -57,16 +60,19 @@ class Media implements MarkingInterface, \Stringable
 
         #[ORM\Id]
         #[ORM\Column(length: 255)]
-        private ?string         $code=null,
+        #[Groups(['media.read'])]
+        private ?string         $code=null, // includes root!
         #[ORM\Column(length: 255, nullable: true)]
+        #[Groups(['media.read'])]
         private ?string         $path=null,
         #[ORM\Column(type: Types::TEXT, nullable: true)]
+        #[Groups(['media.read'])]
         private ?string         $originalUrl=null
     )
     {
         // cannot change the root, since it creates the file in storage there.  Code is also based on it.
         if ($this->originalUrl && !$this->code) {
-            $this->code = SaisClientService::calculateCode(url: $this->originalUrl . $this->root);
+            $this->code = SaisClientService::calculateCode(url: $this->originalUrl, root: $this->root);
 
         }
         $this->resizedImages = new ArrayCollection();
@@ -141,7 +147,7 @@ class Media implements MarkingInterface, \Stringable
 
     public function getFilters(): ?array
     {
-        return $this->filters;
+        return $this->filters??[];
     }
 
     public function setFilters(?array $filters): static

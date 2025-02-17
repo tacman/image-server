@@ -6,9 +6,11 @@
 
     {% set columns = [
         'code',
+        'id',
         'marking',
         'size',
-        'filters',
+        'url',
+        'liipCode',
         'dump'
     ] %}
     <twig:simple_datatables
@@ -16,33 +18,18 @@
             :caller="_self"
             :columns="columns"
     >
-
-        <twig:block name="originalUrl">
-            <a href="{{ row.originalUrl }}" target="_blank" title="{{ row.originalUrl }}">
-                {{ row.originalUrl }}
-            </a>
+        <twig:block name="id">
+            {{ row.media.root }}
+            / {{ row.media.code }}
         </twig:block>
-        <twig:block name="code">
-            {% set blurUrl =  blurUrl(row.blurData) %}
-
-            <a href="{{ row.originalUrl }}" target="_blank" title="{{ row.originalUrl }}">
-                <img src="{{ blurUrl }}" alt="{{ blurUrl }}" class="blur"/>
-                {{ row.code }}
+        <twig:block name="url">
+            {% set url = row.url %}
+            <a href="{{ url }}">
+                <img title="{{ url }}" src="{{ url }}" alt="{{ url }}" style="max-width: 75px; max-height: 75px"/>
             </a>
-            <br />{{ row.path }}
-        </twig:block>
-        <twig:block name="filters">
-            {% for filter, resized in row.filters %}
-                {% if filter == 'tiny' %}
-                    <a href="{{ row.originalUrl }}" target="_blank" title="{{ row.originalUrl }}">
-                        <img class="img-thumbnail" src="{{ resized.url }}" alt="{{ row.originalUrl }}"/>
-
-                    </a>
-                {% endif %}
-            {% endfor %}
         </twig:block>
         <twig:block name="dump">
-            {{ dump(row) }}
+{#            {{ dump(row) }}#}
         </twig:block>
 
     </twig:simple_datatables>

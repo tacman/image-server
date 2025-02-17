@@ -3,78 +3,224 @@
 namespace App\Workflow;
 
 use App\Entity\Media;
+use App\Entity\Resized;
 use App\Message\DownloadImage;
+use App\Message\ResizeImageMessage;
+use App\Repository\MediaRepository;
+use App\Repository\ResizedRepository;
+use App\Service\ApiService;
+use Doctrine\ORM\EntityManagerInterface;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\FilesystemOperator;
+use League\Flysystem\UnableToWriteFile;
+use Liip\ImagineBundle\Service\FilterService;
+use Psr\Log\LoggerInterface;
+use Survos\SaisBundle\Service\SaisClientService;
 use Survos\WorkflowBundle\Attribute\Workflow;
+use Survos\WorkflowBundle\Message\AsyncTransitionMessage;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\TransportNamesStamp;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Workflow\Attribute\AsCompletedListener;
 use Symfony\Component\Workflow\Attribute\AsGuardListener;
 use Symfony\Component\Workflow\Attribute\AsTransitionListener;
+use Symfony\Component\Workflow\Event\CompletedEvent;
 use Symfony\Component\Workflow\Event\GuardEvent;
 use Symfony\Component\Workflow\Event\TransitionEvent;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use function Symfony\Component\String\u;
 
 #[Workflow(supports: [Media::class], name: self::WORKFLOW_NAME)]
 class MediaWorkflow implements IMediaWorkflow
 {
-	public const WORKFLOW_NAME = 'MediaWorkflow';
+    public const WORKFLOW_NAME = 'MediaWorkflow';
 
-	public function __construct(
-        private MessageBusInterface $messageBus,
+    public function __construct(
+        private MessageBusInterface    $messageBus,
+        private EntityManagerInterface $entityManager,
+        private ResizedRepository      $resizedRepository,
+        private readonly FilesystemOperator     $defaultStorage,
+        private readonly LoggerInterface        $logger,
+        private readonly HttpClientInterface    $httpClient,
+        private readonly ApiService $apiService,
+        private readonly MediaRepository        $mediaRepository,
+
+        #[Autowire('@liip_imagine.service.filter')]
+        private readonly FilterService          $filterService,
+        private SerializerInterface             $serializer,
+        private NormalizerInterface             $normalizer,
+        #[Autowire('%env(SAIS_API_ENDPOINT)%')] private string $apiEndpoint
+
     )
-	{
-	}
+    {
+    }
 
 
-	#[AsGuardListener(self::WORKFLOW_NAME)]
-	public function onGuard(GuardEvent $event): void
-	{
-		/** @var Media media */
-		$media = $event->getSubject();
+    #[AsGuardListener(self::WORKFLOW_NAME)]
+    public function onGuard(GuardEvent $event): void
+    {
+        /** @var Media media */
+        $media = $event->getSubject();
 
-		switch ($event->getTransition()->getName()) {
-		/*
-		e.g.
-		if ($event->getSubject()->cannotTransition()) {
-		  $event->setBlocked(true, "reason");
-		}
-		App\Entity\Media
-		*/
-		    case self::TRANSITION_DOWNLOAD:
-		        break;
-		    case self::TRANSITION_RESIZE:
-		        break;
-		}
-	}
-
-
-	#[AsTransitionListener(self::WORKFLOW_NAME)]
-	public function onTransition(TransitionEvent $event): void
-	{
-		/** @var Media media */
-		$media = $event->getSubject();
-
-		switch ($event->getTransition()->getName()) {
-		/*
-		e.g.
-		if ($event->getSubject()->cannotTransition()) {
-		  $event->setBlocked(true, "reason");
-		}
-		App\Entity\Media
-		*/
-		    case self::TRANSITION_DOWNLOAD:
-                // depending on the marking/filter status, dispatch
-                dump($event);
-                $envelope = $this->messageBus->dispatch(
-                    $msg = new DownloadImage($media->getOriginalUrl(),
-                    $media->getRoot(),
-                    $media->getCode(),
-                    $event->getContext()['liip']??[],
-                    $event->getContext()['callbackUrl']??null
-            )
-            );
-                // we _could_ dispatch resize requests here if it's already downloaded
-
+        switch ($event->getTransition()->getName()) {
+            /*
+            e.g.
+            if ($event->getSubject()->cannotTransition()) {
+              $event->setBlocked(true, "reason");
+            }
+            App\Entity\Media
+            */
+            case self::TRANSITION_DOWNLOAD:
                 break;
-		    case self::TRANSITION_RESIZE:
-		        break;
-		}
-	}
+            case self::TRANSITION_RESIZE:
+                break;
+        }
+    }
+
+    private function getMedia(TransitionEvent|CompletedEvent $event): Media
+    {
+        /** @var Media media */
+        return $event->getSubject();
+    }
+
+    #[AsCompletedListener(self::WORKFLOW_NAME, IMediaWorkflow::TRANSITION_DOWNLOAD)]
+    public function onCompleted(CompletedEvent $event): void
+    {
+        $media = $this->getMedia($event);
+        $stamps = [];
+        $stamps[] = new TransportNamesStamp('resize');
+        foreach ($event->getContext()['liip'] as $filter) {
+            if (!$resized = $this->resizedRepository->findOneBy([
+                'media' => $media,
+                'liipCode' => $filter,
+            ])) {
+                $resized = new Resized($media, $filter);
+                $media->addResizedImage($resized);
+                $this->entityManager->persist($resized);
+                $this->entityManager->flush();
+                $resizedImages[] = $resized;
+                // now dispatch a message to do the resize
+                $this->messageBus->dispatch(new AsyncTransitionMessage(
+                    $resized->getId(),
+                    $resized::class,
+                    IResizedWorkflow::TRANSITION_RESIZE,
+                    IResizedWorkflow::WORKFLOW_NAME,
+                ), $stamps);
+            }
+        }
+    }
+
+    #[AsTransitionListener(self::WORKFLOW_NAME, IMediaWorkflow::TRANSITION_DOWNLOAD)]
+    public function onTransition(TransitionEvent $event): void
+    {
+        /** @var Media media */
+        $media = $this->getMedia($event);
+        $url = $media->getOriginalUrl();
+
+        $path = $media->getRoot() . '/' . SaisClientService::calculatePath($media->getCode());
+        $tempFile = $media->getCode() . '.' . pathinfo($url, PATHINFO_EXTENSION);// no dirs
+        if (!file_exists($tempFile)) {
+            $this->downloadUrl($url, $tempFile);
+        }
+
+        $content = file_get_contents($tempFile);
+
+        $mimeType = mime_content_type($tempFile);
+        $ext = pathinfo($url, PATHINFO_EXTENSION);
+        $path .= '.' . ($ext ?: u($mimeType)->after('image/'));
+
+        // upload it to long-term storage
+        if (!$this->defaultStorage->has($path)) {
+            $this->uploadUrl($tempFile, $path);
+            $this->logger->info("$url downloaded to " . $path);
+        } else {
+            $this->logger->info("$url already exists as  $path");
+        }
+
+        $media
+            ->setPath($path)
+            ->setOriginalUrl($url)
+            ->setMimeType($mimeType)
+            ->setSize(filesize($tempFile));
+
+        return;
+
+        dd($event->getContext());
+        $existingFilters = $media->getFilters();
+
+        // @todo: filters, dispatch a synced message since we're in the download
+        foreach ($message->getFilters() as $filter) {
+
+            if (!$resized = $this->resizedRepository->findOneBy([
+                'media' => $media,
+                'liipCode' => $filter
+            ])) {
+                $resized = new Resized($media, $filter);
+                $this->entityManager->persist($resized);
+            }
+        }
+        // side effect of resize is that media is updated with the filter sized.
+        $this->entityManager->flush();
+        // probably too early
+//        $this->dispatchWebhook($message->getCallbackUrl(), $media);
+//        $envelope = $this->messageBus->dispatch(
+//            $msg = new DownloadImage($media->getOriginalUrl(),
+//                $media->getRoot(),
+//                $media->getCode(),
+//                $event->getContext()['liip'] ?? [],
+//                $event->getContext()['callbackUrl'] ?? null
+//            )
+//        );
+    }
+
+    private function uploadUrl(string $tempFile, string $code): void
+    {
+        $stream = fopen($tempFile, 'r');
+
+        try {
+            $config = []; // visibility?
+            $directory = pathinfo($code, PATHINFO_DIRNAME);
+            if (!$this->defaultStorage->directoryExists($directory)) {
+                $this->defaultStorage->createDirectory($directory);
+            }
+            $this->defaultStorage->writeStream($code, $stream, $config);
+        } catch (FilesystemException|UnableToWriteFile $exception) {
+            // handle the error
+            $this->logger->error($exception->getMessage());
+            dd($exception, $code);
+        }
+
+    }
+
+    /**
+     * writes the URL locally, esp during debugging but also to check the mime type
+     *
+     * @param string $url
+     * @param string $tempFile
+     * @return void
+     * @throws TransportExceptionInterface
+     */
+    private function downloadUrl(string $url, string $tempFile): string
+    {
+        $client = $this->httpClient;
+        $response = $client->request('GET', $url);
+
+// Responses are lazy: this code is executed as soon as headers are received
+        if (200 !== $response->getStatusCode()) {
+            throw new \Exception("Problem with $url " . $response->getStatusCode());
+        }
+
+        $fileHandler = fopen($tempFile, 'w');
+        foreach ($client->stream($response) as $chunk) {
+            fwrite($fileHandler, $chunk->getContent());
+        }
+        fclose($fileHandler);
+        return $tempFile;
+
+    }
+
+
 }

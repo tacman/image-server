@@ -1,6 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 
-import { Thumbhash } from 'thumbhash';
+// import { Thumbhash } from 'thumbhash';
 /*
  * This is an example Stimulus controller!
  *
@@ -12,9 +12,9 @@ import { Thumbhash } from 'thumbhash';
  */
 export default class extends Controller {
     connect() {
-        super.connect();
-        new Thumbhash().set({})
-        Thumbhash.blurData()
-        this.element.textContent = 'Hello Stimulus! Edit me in assets/controllers/hello_controller.js';
+        // super.connect();
+        // new Thumbhash().set({})
+        // Thumbhash.blurData()
+        // this.element.textContent = 'Hello Stimulus! Edit me in assets/controllers/hello_controller.js';
     }
 }

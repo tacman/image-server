@@ -15,6 +15,6 @@ interface IResizedWorkflow
 	#[Place]
 	public const PLACE_DONE = 'done';
 
-	#[Transition(from: [self::PLACE_NEW], to: self::PLACE_DONE)]
+	#[Transition(from: [self::PLACE_NEW, self::PLACE_DONE], to: self::PLACE_DONE)]
 	public const TRANSITION_RESIZE = 'resize';
 }

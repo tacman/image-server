@@ -15,7 +15,7 @@ security:
 
         # https://symfony.com/bundles/LiipImagineBundle/current/basic-usage.html#optimize-firewall-configuration
         image_resolver:
-            pattern: ^/media/cache/resolve
+            pattern: ^/cache/resolve
             security: false
 
             # activate different ways to authenticate

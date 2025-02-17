@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ResizedRepository;
+use App\Workflow\IResizedWorkflow;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\WorkflowBundle\Traits\MarkingInterface;
 use Survos\WorkflowBundle\Traits\MarkingTrait;
@@ -29,9 +30,12 @@ class Resized implements MarkingInterface, \Stringable
     #[ORM\Column(nullable: true)]
     private ?int $h = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $url = null;
+
     public function __construct(
         #[ORM\ManyToOne(inversedBy: 'resizedImages')]
-        #[ORM\JoinColumn(nullable: false, referencedColumnName: 'code')]
+        #[ORM\JoinColumn(referencedColumnName: 'code', nullable: false)]
         private ?Media  $media = null,
 
         #[ORM\Column(length: 16)]
@@ -111,5 +115,17 @@ class Resized implements MarkingInterface, \Stringable
     {
         return $this->getMedia() . '-' . $this->getLiipCode();
         // TODO: Implement __toString() method.
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(?string $url): static
+    {
+        $this->url = $url;
+
+        return $this;
     }
 }

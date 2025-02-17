@@ -8,6 +8,7 @@ final class ResizeImageMessage
 {
 
      public function __construct(
+         private int $resizeId,
          private readonly string  $filter,
          private readonly string  $path,
          private readonly ?string  $code=null, // for access to the media object

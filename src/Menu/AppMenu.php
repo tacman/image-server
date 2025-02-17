@@ -52,6 +52,7 @@ final class AppMenu implements KnpMenuHelperInterface
         $this->add($menu, 'app_dispatch_process_ui');
         $this->add($menu, 'survos_storage_zones');
         $this->add($menu, 'app_media');
+        $this->add($menu, 'app_resized');
 
 
         if ($this->isEnv('dev')) {

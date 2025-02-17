@@ -59,52 +59,7 @@ class ApiService
     #[AsMessageHandler()]
     public function onResizeImage(ResizeImageMessage $message): void
     {
-        // the logic from filterAction
-        $path = $message->getPath();
-        $path = PathHelper::urlPathToFilePath($path);
-        $filter = $message->getFilter();
 
-        // this actually _does_ the image creation and returns the url
-        $url =  $this->filterService->getUrlOfFilteredImage(
-            $path,
-            $filter,
-            null,
-            true
-        );
-        $this->logger->info(sprintf('%s (%s) has been resolved to %s',
-            $path, $filter, $url));
-
-        // update the info in the database?  Seems like the wrong place to do this.
-        // although this is slow, it's nice to know the generated size.
-        $cachedUrl =  $this->filterService->getUrlOfFilteredImage(
-            $path,
-            $filter,
-            null,
-            true
-        );
-
-        $request = $this->httpClient->request('GET', $cachedUrl);
-        $headers = $request->getHeaders();
-        /** @var Media $media */
-        $media = $this->mediaRepository->findOneBy(['code' => $message->getCode()]);
-        assert($media, "No media for $path / " . $message->getCode());
-        $size = (int)$headers['content-length'][0];
-        $media->addFilter($filter, $size, $url);
-
-        if ($filter == 'tiny') {
-            $service = new ThumbHashService();
-            $content = $request->getContent();
-            list($width, $height, $pixels) = $service->extract_size_and_pixels_with_imagick($content);
-
-            $hash = Thumbhash::RGBAToHash($width, $height, $pixels);
-            $key = Thumbhash::convertHashToString($hash); // You can store this in your database as a string
-            $media
-                ->setBlurData($hash)
-                ->setBlur($key);
-//            $url = Thumbhash::toDataURL($hash); // use in twig
-
-        }
-        $this->entityManager->flush();
 
     }
 

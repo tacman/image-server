@@ -24,16 +24,21 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\TransportNamesStamp;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class ApiController extends AbstractController implements TokenAuthenticatedController
 {
 
     public function __construct(
-        private MessageBusInterface $messageBus,
-        private MediaRepository     $mediaRepository,
+        private MessageBusInterface    $messageBus,
+        private MediaRepository        $mediaRepository,
         private EntityManagerInterface $entityManager,
+        private NormalizerInterface     $normalizer,
+        private readonly SerializerInterface $serializer,
     )
     {
     }
@@ -58,9 +63,10 @@ class ApiController extends AbstractController implements TokenAuthenticatedCont
             'test',
             [
             'https://cdn.dummyjson.com/products/images/beauty/Powder%20Canister/1.png',
-            'https://cdn.dummyjson.com/products/images/beauty/Red%20Nail%20Polish/1.png'
+//            'https://cdn.dummyjson.com/products/images/beauty/Red%20Nail%20Polish/1.png'
         ], [
-            'tiny','small', 'medium'
+            'tiny',
+//                'small', 'medium'
         ], $callbackUrl);
         $form = $this->createForm(ProcessPayloadType::class, $processPayload);
         $form->handleRequest($request);
@@ -98,13 +104,21 @@ class ApiController extends AbstractController implements TokenAuthenticatedCont
         $codes = [];
         foreach ($payload->images as $url) {
 
-            $code = SaisClientService::calculateCode(url: $url);
+            $code = SaisClientService::calculateCode($url, $payload->root);
             if (!$media = $this->mediaRepository->findOneBy(
                 ['code' => $code, 'root' => $payload->root]
             )) {
                 $media = new Media(root: $payload->root, code: $code, originalUrl: $url);
                 $this->entityManager->persist($media);
             }
+            // add the filters so we have them for after download.
+            $filters = $media->getFilters();
+            foreach ($payload->filters as $filter) {
+                if (!array_key_exists($filter, $filters)) {
+                    $filters[$filter] = [];
+                }
+            }
+            $media->setFilters($filters);
             $codes[] = $code;
         }
         $this->entityManager->flush();
@@ -120,34 +134,13 @@ class ApiController extends AbstractController implements TokenAuthenticatedCont
                 IMediaWorkflow::TRANSITION_DOWNLOAD,
                 workflow: MediaWorkflow::WORKFLOW_NAME,
                 context: ['liip' => $payload->filters]
-            ));
+            ), [
+                new TransportNamesStamp('download')
+            ]);
 
         }
+        $response = $this->normalizer->normalize($listing, 'object', ['groups' => ['media.read','marking']]);
 
-        return $this->json($listing);
-    }
-
-    #[Route('/request/{filter}', name: 'app_request_filter')]
-    #[Template('homepage.html.twig')]
-    public function requestResizedImage(
-        Request $request,
-        string $filter,
-        #[MapQueryParameter] ?string $url=null,
-        #[MapQueryParameter] ?string $path=null,
-        #[MapQueryParameter] ?string $callbackUrl=null
-    ): JsonResponse
-    {
-        assert(false, "@todo: payload");
-        if ($request->getMethod() === Request::METHOD_POST) {
-            $urls = $request->request->get('urls', []);
-        }
-
-        if (!$media = $this->apiService->getMedia($url, $path)) {
-            throw new NotFoundHttpException("$url nor $path found");
-        }
-        $this->messageBus->dispatch(
-            new ResizeImageMessage($filter, $media->getPath(), $callbackUrl)
-        );
-        return $this->json($media);
+        return $this->json($response);
     }
 }

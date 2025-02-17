@@ -21,7 +21,7 @@ class MediaController extends AbstractController
     {
     }
 
-    #[Route('/media', name: 'app_media')]
+    #[Route('/app/media', name: 'app_media')]
     public function index(): Response
     {
         return $this->render('media/index.html.twig', [
@@ -30,11 +30,11 @@ class MediaController extends AbstractController
         ]);
     }
 
-    #[Route('/resized', name: 'app_resized')]
+    #[Route('/app/resized', name: 'app_resized')]
     public function resized(): Response
     {
         return $this->render('media/resized.html.twig', [
-            'rows' => $this->resizedRepository->findBy([], [], 400),
+            'rows' => $this->resizedRepository->findBy([], [], 40),
             'controller_name' => 'resizedController',
         ]);
     }

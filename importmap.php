@@ -26,10 +26,10 @@ return [
         'version' => '7.3.0',
     ],
     '@tabler/core' => [
-        'version' => '1.0.0-beta21',
+        'version' => '1.0.0',
     ],
     '@tabler/core/dist/css/tabler.min.css' => [
-        'version' => '1.0.0-beta21',
+        'version' => '1.0.0',
         'type' => 'css',
     ],
     'simple-datatables' => [
