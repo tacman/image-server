@@ -3,7 +3,7 @@
 namespace App\Workflow;
 
 use App\Entity\Media;
-use App\Entity\Resized;
+use App\Entity\Thumb;
 use Doctrine\ORM\EntityManagerInterface;
 use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
 use Liip\ImagineBundle\Service\FilterService;
@@ -18,7 +18,7 @@ use Symfony\Component\Workflow\Event\TransitionEvent;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Thumbhash\Thumbhash;
 
-#[Workflow(supports: [Resized::class], name: self::WORKFLOW_NAME)]
+#[Workflow(supports: [Thumb::class], name: self::WORKFLOW_NAME)]
 class ResizedWorkflow implements IResizedWorkflow
 {
 	public const WORKFLOW_NAME = 'ResizedWorkflow';
@@ -37,7 +37,7 @@ class ResizedWorkflow implements IResizedWorkflow
 	#[AsGuardListener(self::WORKFLOW_NAME)]
 	public function onGuard(GuardEvent $event): void
 	{
-		/** @var Resized resized */
+		/** @var Thumb resized */
 		$resized = $event->getSubject();
 
 		switch ($event->getTransition()->getName()) {
@@ -54,7 +54,7 @@ class ResizedWorkflow implements IResizedWorkflow
 	#[AsTransitionListener(self::WORKFLOW_NAME, self::TRANSITION_RESIZE)]
 	public function onTransition(TransitionEvent $event): void
 	{
-		/** @var Resized resized */
+		/** @var Thumb resized */
 		$resized = $event->getSubject();
         $media = $resized->getMedia();
 //        dd($resized, $resized->getMedia()->getPath());
@@ -95,7 +95,7 @@ class ResizedWorkflow implements IResizedWorkflow
         $content = $request->getContent();
         /** @var Media $media */
         $size = (int)$headers['content-length'][0];
-        $media->addFilter($filter, $size, $url);
+        $media->addThumbData($filter, $size, $url);
         $service = new ThumbHashService();
         $image = new \Imagick();
         $image->readImageBlob($content);

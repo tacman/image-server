@@ -112,13 +112,13 @@ class ApiController extends AbstractController implements TokenAuthenticatedCont
                 $this->entityManager->persist($media);
             }
             // add the filters so we have them for after download.
-            $filters = $media->getFilters();
+            $filters = $media->getThumbData();
             foreach ($payload->filters as $filter) {
                 if (!array_key_exists($filter, $filters)) {
                     $filters[$filter] = [];
                 }
             }
-            $media->setFilters($filters);
+            $media->setThumbData($filters);
             $codes[] = $code;
         }
         $this->entityManager->flush();
