@@ -3,11 +3,11 @@
 namespace App\Workflow;
 
 use App\Entity\Media;
-use App\Entity\Resized;
+use App\Entity\Thumb;
 use App\Message\DownloadImage;
 use App\Message\ResizeImageMessage;
 use App\Repository\MediaRepository;
-use App\Repository\ResizedRepository;
+use App\Repository\ThumbRepository;
 use App\Service\ApiService;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemException;
@@ -39,19 +39,19 @@ class MediaWorkflow implements IMediaWorkflow
     public const WORKFLOW_NAME = 'MediaWorkflow';
 
     public function __construct(
-        private MessageBusInterface    $messageBus,
-        private EntityManagerInterface $entityManager,
-        private ResizedRepository      $resizedRepository,
-        private readonly FilesystemOperator     $defaultStorage,
-        private readonly LoggerInterface        $logger,
-        private readonly HttpClientInterface    $httpClient,
-        private readonly ApiService $apiService,
-        private readonly MediaRepository        $mediaRepository,
+        private MessageBusInterface          $messageBus,
+        private EntityManagerInterface       $entityManager,
+        private ThumbRepository              $resizedRepository,
+        private readonly FilesystemOperator  $defaultStorage,
+        private readonly LoggerInterface     $logger,
+        private readonly HttpClientInterface $httpClient,
+        private readonly ApiService          $apiService,
+        private readonly MediaRepository     $mediaRepository,
 
         #[Autowire('@liip_imagine.service.filter')]
-        private readonly FilterService          $filterService,
-        private SerializerInterface             $serializer,
-        private NormalizerInterface             $normalizer,
+        private readonly FilterService       $filterService,
+        private SerializerInterface          $serializer,
+        private NormalizerInterface          $normalizer,
         #[Autowire('%env(SAIS_API_ENDPOINT)%')] private string $apiEndpoint
 
     )
@@ -97,7 +97,7 @@ class MediaWorkflow implements IMediaWorkflow
                 'media' => $media,
                 'liipCode' => $filter,
             ])) {
-                $resized = new Resized($media, $filter);
+                $resized = new Thumb($media, $filter);
                 $media->addResizedImage($resized);
                 $this->entityManager->persist($resized);
                 $this->entityManager->flush();
@@ -158,7 +158,7 @@ class MediaWorkflow implements IMediaWorkflow
                 'media' => $media,
                 'liipCode' => $filter
             ])) {
-                $resized = new Resized($media, $filter);
+                $resized = new Thumb($media, $filter);
                 $this->entityManager->persist($resized);
             }
         }

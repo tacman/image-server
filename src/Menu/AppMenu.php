@@ -6,7 +6,7 @@ use App\Entity\Img;
 use App\Entity\Inst;
 use App\Entity\Media;
 use App\Entity\Obj;
-use App\Entity\Resized;
+use App\Entity\Thumb;
 use Survos\BootstrapBundle\Event\KnpMenuEvent;
 use Survos\BootstrapBundle\Service\MenuService;
 use Survos\BootstrapBundle\Traits\KnpMenuHelperInterface;
@@ -52,7 +52,8 @@ final class AppMenu implements KnpMenuHelperInterface
         $this->add($menu, 'app_dispatch_process_ui');
         $this->add($menu, 'survos_storage_zones');
         $this->add($menu, 'app_media');
-        $this->add($menu, 'app_resized');
+        $this->add($menu, 'media_index');
+        $this->add($menu, 'app_thumbs');
 
 
         if ($this->isEnv('dev')) {
@@ -63,7 +64,7 @@ final class AppMenu implements KnpMenuHelperInterface
                 $this->add($subMenu, 'survos_command', ['commandName' => $commandName], $commandName);
             }
             $subMenu = $this->addSubmenu($menu, 'workflow:iterate');
-            foreach ([Media::class, Resized::class] as $className) {
+            foreach ([Media::class, Thumb::class] as $className) {
                 $className = str_replace("\\", "\\\\", $className);
                 $this->add($subMenu, 'survos_command', ['commandName' => 'workflow:iterate', 'className' => $className], $className);
             }

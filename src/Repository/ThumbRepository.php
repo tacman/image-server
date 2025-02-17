@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Resized;
+use App\Entity\Thumb;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Resized>
+ * @extends ServiceEntityRepository<Thumb>
  */
-class ResizedRepository extends ServiceEntityRepository
+class ThumbRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Resized::class);
+        parent::__construct($registry, Thumb::class);
     }
 
     //    /**
-    //     * @return Resized[] Returns an array of Resized objects
+    //     * @return Thumb[] Returns an array of Thumb objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class ResizedRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Resized
+    //    public function findOneBySomeField($value): ?Thumb
     //    {
     //        return $this->createQueryBuilder('r')
     //            ->andWhere('r.exampleField = :val')

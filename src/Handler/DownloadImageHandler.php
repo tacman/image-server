@@ -2,11 +2,11 @@
 
 namespace App\Handler;
 
-use App\Entity\Resized;
+use App\Entity\Thumb;
 use App\Message\DownloadImage;
 use App\Message\ResizeImageMessage;
 use App\Repository\MediaRepository;
-use App\Repository\ResizedRepository;
+use App\Repository\ThumbRepository;
 use App\Service\ApiService;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemException;

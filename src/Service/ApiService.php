@@ -6,7 +6,6 @@ namespace App\Service;
 
 use App\Entity\Media;
 use App\Message\DownloadImage;
-use App\Message\ResizeImageMessage;
 use App\Message\SendWebhookMessage;
 use App\Repository\MediaRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -56,15 +55,9 @@ class ApiService
         dd($event);
     }
 
-    #[AsMessageHandler()]
-    public function onResizeImage(ResizeImageMessage $message): void
-    {
-
-
-    }
-
     public function getMedia(?string $url = null, ?string $path = null): ?Media
     {
+        assert(false, "need root?");
         if ($url && $path) {
             throw new \RuntimeException('Cannot have both path and url');
         }

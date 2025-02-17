@@ -3,15 +3,15 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\ResizedRepository;
+use App\Repository\ThumbRepository;
 use App\Workflow\IResizedWorkflow;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\WorkflowBundle\Traits\MarkingInterface;
 use Survos\WorkflowBundle\Traits\MarkingTrait;
 
-#[ORM\Entity(repositoryClass: ResizedRepository::class)]
+#[ORM\Entity(repositoryClass: ThumbRepository::class)]
 #[ApiResource]
-class Resized implements MarkingInterface, \Stringable
+class Thumb implements MarkingInterface, \Stringable
 {
     use MarkingTrait;
 

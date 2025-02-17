@@ -7,7 +7,7 @@ use Survos\WorkflowBundle\Attribute\Transition;
 
 interface IResizedWorkflow
 {
-	public const WORKFLOW_NAME = 'ResizedWorkflow';
+	public const WORKFLOW_NAME = 'ThumbWorkflow';
 
 	#[Place(initial: true)]
 	public const PLACE_NEW = 'new';

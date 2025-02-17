@@ -8,17 +8,22 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Survos\CoreBundle\Entity\RouteParametersInterface;
+use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Survos\SaisBundle\Service\SaisClientService;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Survos\WorkflowBundle\Traits\MarkingInterface;
 use Survos\WorkflowBundle\Traits\MarkingTrait;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Thumbhash\Thumbhash;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
-class Media implements MarkingInterface, \Stringable
+class Media implements MarkingInterface, \Stringable, RouteParametersInterface, IMediaWorkflow
 {
     use MarkingTrait;
-
+    use RouteParametersTrait;
+    public const UNIQUE_PARAMETERS = ['mediaId' => 'code'];
 
     #[ORM\Column(length: 16, nullable: true)]
     private ?string $mimeType = null;
@@ -28,7 +33,7 @@ class Media implements MarkingInterface, \Stringable
 
     #[ORM\Column(nullable: true, options: ['jsonb' => true])]
     #[Groups(['media.read'])]
-    private ?array $filters = null;
+    private ?array $thumbData = null;
 
     #[ORM\Column]
     #[Gedmo\Timestampable(on:"create")]
@@ -39,17 +44,14 @@ class Media implements MarkingInterface, \Stringable
     private ?\DateTimeImmutable $updatedAt = null;
 
     /**
-     * @var Collection<int, Resized>
+     * @var Collection<int, Thumb>
      */
-    #[ORM\OneToMany(targetEntity: Resized::class, mappedBy: 'media', orphanRemoval: true)]
-    private Collection $resizedImages;
+    #[ORM\OneToMany(targetEntity: Thumb::class, mappedBy: 'media', orphanRemoval: true)]
+    private Collection $thumbs;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['media.read'])]
     private ?string $blur = null;
-
-    #[ORM\Column(nullable: true, options: ['jsonb' => true])]
-    private ?array $blurData = null;
 
     /**
      * @param string|null $path
@@ -75,7 +77,7 @@ class Media implements MarkingInterface, \Stringable
             $this->code = SaisClientService::calculateCode(url: $this->originalUrl, root: $this->root);
 
         }
-        $this->resizedImages = new ArrayCollection();
+        $this->thumbs = new ArrayCollection();
         $this->marking = IMediaWorkflow::PLACE_NEW;
     }
 
@@ -145,28 +147,28 @@ class Media implements MarkingInterface, \Stringable
         return $this;
     }
 
-    public function getFilters(): ?array
+    public function getThumbData(): ?array
     {
-        return $this->filters??[];
+        return $this->thumbData??[];
     }
 
-    public function setFilters(?array $filters): static
+    public function setThumbData(?array $thumbData): static
     {
-        $this->filters = $filters;
+        $this->thumbData = $thumbData;
 
         return $this;
     }
 
-    public function addFilter($filter, ?int $size = null, ?string $url=null): static
+    public function addThumbData($filter, ?int $size = null, ?string $url=null): static
     {
-        $filters = $this->getFilters()??[];
+        $filters = $this->getThumbData()??[];
         if (!in_array($filter, $filters, true)) {
             $filters[$filter] = [
                 'size' => $size,
                 'url' => $url
                 ];
         }
-        $this->setFilters($filters);
+        $this->setThumbData($filters);
         return $this;
 
     }
@@ -196,26 +198,26 @@ class Media implements MarkingInterface, \Stringable
     }
 
     /**
-     * @return Collection<int, Resized>
+     * @return Collection<int, Thumb>
      */
-    public function getResizedImages(): Collection
+    public function getThumbs(): Collection
     {
-        return $this->resizedImages;
+        return $this->thumbs;
     }
 
-    public function addResizedImage(Resized $resizedImage): static
+    public function addResizedImage(Thumb $resizedImage): static
     {
-        if (!$this->resizedImages->contains($resizedImage)) {
-            $this->resizedImages->add($resizedImage);
+        if (!$this->thumbs->contains($resizedImage)) {
+            $this->thumbs->add($resizedImage);
             $resizedImage->setMedia($this);
         }
 
         return $this;
     }
 
-    public function removeResizedImage(Resized $resizedImage): static
+    public function removeResizedImage(Thumb $resizedImage): static
     {
-        if ($this->resizedImages->removeElement($resizedImage)) {
+        if ($this->thumbs->removeElement($resizedImage)) {
             // set the owning side to null (unless already changed)
             if ($resizedImage->getMedia() === $this) {
                 $resizedImage->setMedia(null);
@@ -244,13 +246,11 @@ class Media implements MarkingInterface, \Stringable
 
     public function getBlurData(): ?array
     {
-        return $this->blurData;
+        return Thumbhash::convertStringToHash($this->getBlur());
     }
 
-    public function setBlurData(?array $blurData): static
+    public function getId(): string
     {
-        $this->blurData = $blurData;
-
-        return $this;
+        return $this->getCode();
     }
 }

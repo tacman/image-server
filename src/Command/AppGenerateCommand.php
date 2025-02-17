@@ -32,7 +32,7 @@ final class AppGenerateCommand extends InvokableServiceCommand
         $progressBar = new ProgressBar($io, $mediaRepository->count());
         foreach ($files as $media) {
             $progressBar->advance();
-            foreach ($media->getFilters()??[] as $filter=>$currentSize) {
+            foreach ($media->getThumbData()??[] as $filter=> $currentSize) {
                 $bus->dispatch(new ResizeImageMessage($filter, $media->getPath(), code: $media->getCode()));
             }
         }

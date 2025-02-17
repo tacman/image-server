@@ -19,9 +19,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Thumbhash\Thumbhash;
 
 #[Workflow(supports: [Thumb::class], name: self::WORKFLOW_NAME)]
-class ResizedWorkflow implements IResizedWorkflow
+class ThumbWorkflow implements IResizedWorkflow
 {
-	public const WORKFLOW_NAME = 'ResizedWorkflow';
+	public const WORKFLOW_NAME = 'ThumbWorkflow';
 
 	public function __construct(
         private HttpClientInterface $httpClient,
@@ -33,13 +33,14 @@ class ResizedWorkflow implements IResizedWorkflow
 	{
 	}
 
+    private function getThumb($event): Thumb
+    {
+        /** @var Thumb */ return $event->getSubject();
+    }
 
 	#[AsGuardListener(self::WORKFLOW_NAME)]
 	public function onGuard(GuardEvent $event): void
 	{
-		/** @var Thumb resized */
-		$resized = $event->getSubject();
-
 		switch ($event->getTransition()->getName()) {
 		    case self::TRANSITION_RESIZE:
                 // @check if it's already done (if it's marked as resize)
@@ -54,10 +55,9 @@ class ResizedWorkflow implements IResizedWorkflow
 	#[AsTransitionListener(self::WORKFLOW_NAME, self::TRANSITION_RESIZE)]
 	public function onTransition(TransitionEvent $event): void
 	{
-		/** @var Thumb resized */
-		$resized = $event->getSubject();
-        $media = $resized->getMedia();
-//        dd($resized, $resized->getMedia()->getPath());
+		$thumb = $event->getSubject();
+        $media = $thumb->getMedia();
+//        dd($thumb, $thumb->getMedia()->getPath());
 
         // the logic from filterAction
         $path = $media->getPath();
@@ -66,7 +66,7 @@ class ResizedWorkflow implements IResizedWorkflow
         }
         $path = PathHelper::urlPathToFilePath($path);
 
-        $filter = $resized->getLiipCode();
+        $filter = $thumb->getLiipCode();
 
         // this actually _does_ the image creation and returns the url
         $url =  $this->filterService->getUrlOfFilteredImage(
@@ -87,7 +87,7 @@ class ResizedWorkflow implements IResizedWorkflow
             true
         );
         // $url _might_ be /resolve?
-        $resized->setUrl($cachedUrl);
+        $thumb->setUrl($cachedUrl);
 
         // we probably have this locally, but this will also work if the thumbnails are remote
         $request = $this->httpClient->request('GET', $cachedUrl);
@@ -100,7 +100,7 @@ class ResizedWorkflow implements IResizedWorkflow
         $image = new \Imagick();
         $image->readImageBlob($content);
 //        dd($image->getSize()); // rows, columns
-        $resized
+        $thumb
             ->setSize(strlen($content))
             ->setW($image->getImageWidth())
             ->setH($image->getImageHeight());
@@ -112,10 +112,7 @@ class ResizedWorkflow implements IResizedWorkflow
             $hash = Thumbhash::RGBAToHash($width, $height, $pixels);
             $key = Thumbhash::convertHashToString($hash); // You can store this in your database as a string
             $media
-                ->setBlurData($hash) // convertStringToHash is better!
                 ->setBlur($key);
-//            $url = Thumbhash::toDataURL($hash); // use in twig
-
         }
         $this->entityManager->flush();	}
 }
