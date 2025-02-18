@@ -7,11 +7,11 @@
     ],
     "cron": [
         {
-            "command": "bin/console mess:consume sais  --time-limit 270",
+            "command": "php -d memory_limit=2G bin/console messenger:consume download  --time-limit 270",
             "schedule": "*/5 * * * *"
         },
         {
-            "command": "bin/console mess:consume resize  --time-limit 270",
+            "command": "php -d memory_limit=2G bin/console messenger:consume resize  --time-limit 270",
             "schedule": "*/5 * * * *"
         }
     ],
