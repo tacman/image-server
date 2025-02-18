@@ -97,7 +97,8 @@ class MediaWorkflow implements IMediaWorkflow
     public function onCompleted(CompletedEvent $event): void
     {
         $media = $this->getMedia($event);
-        $this->resizeMedia($media, $event->getContext()['liipCodes']);
+        $this->resizeMedia($media, ['tiny', 'small', 'medium', 'large']);
+//        $event->getContext()['liipCodes']);
 
         // eventually, when the download is complete, dispatch a webhook
 //        $env = $this->messageBus->dispatch(new MediaModel(
