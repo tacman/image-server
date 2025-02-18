@@ -22,13 +22,13 @@ flysystem:
                 prefix: '%env(S3_STORAGE_PREFIX)%'
 
 
-when@dev:
-    flysystem:
-        storages:
-            default.storage:
-                adapter: 'local'
-                options:
-                    directory: '%kernel.project_dir%/public/images'
+#when@dev:
+#    flysystem:
+#        storages:
+#            default.storage:
+#                adapter: 'local'
+#                options:
+#                    directory: '%kernel.project_dir%/public/images'
 
 
 #        pictures.storage:
