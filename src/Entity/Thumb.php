@@ -43,6 +43,9 @@ class Thumb implements MarkingInterface, \Stringable
 
     )
     {
+        if ($this->media) {
+            $media->addThumb($this);
+        }
         $this->marking = 'new';
     }
 

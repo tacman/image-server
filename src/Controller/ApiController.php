@@ -6,12 +6,16 @@ use App\Entity\Media;
 use App\Form\ProcessPayloadType;
 use App\Message\DownloadImage;
 use App\Message\ResizeImageMessage;
+use App\Message\SendWebhookMessage;
 use App\Repository\MediaRepository;
 use App\Service\ApiService;
 use App\Workflow\IMediaWorkflow;
 use App\Workflow\MediaWorkflow;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
+use Survos\SaisBundle\Message\MediaUploadMessage;
 use Survos\SaisBundle\Model\ProcessPayload;
+use Survos\SaisBundle\Model\ThumbPayload;
 use Survos\SaisBundle\Service\SaisClientService;
 use Survos\WorkflowBundle\Message\AsyncTransitionMessage;
 use Symfony\Bridge\Twig\Attribute\Template;
@@ -34,45 +38,54 @@ class ApiController extends AbstractController implements TokenAuthenticatedCont
 {
 
     public function __construct(
-        private MessageBusInterface    $messageBus,
-        private MediaRepository        $mediaRepository,
-        private EntityManagerInterface $entityManager,
-        private NormalizerInterface     $normalizer,
+        private MessageBusInterface          $messageBus,
+        private MediaRepository              $mediaRepository,
+        private EntityManagerInterface       $entityManager,
+        private NormalizerInterface          $normalizer,
         private readonly SerializerInterface $serializer,
+        private readonly LoggerInterface $logger,
     )
     {
     }
 
     // this is in the calling application, here for testing only
     #[Route('/handle_image_resize', name: 'handle_image_resize')]
-    public function handleResizeImage(Request $request): Response
+    #[Route('/handle_media', name: 'handle_media')]
+    public function handleResizeImage(
+        Request $request,
+//        #[MapRequestPayload] ?ThumbPayload $thumbPayload=null,
+    ): Response
     {
-        dd();
         return $this->json(['status' => 'ok']);
+        return $this->json($thumbPayload);
     }
 
     #[Route('/ui/dispatch_process', name: 'app_dispatch_process_ui', methods: ['POST', 'GET'])]
     #[Template('test-dispatch.html.twig')]
     public function testDispatch(
         UrlGeneratorInterface $urlGenerator,
-        Request $request
+        Request               $request
     ): Response|array
     {
-        $callbackUrl = $urlGenerator->generate('handle_image_resize', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $thumbCallback = $urlGenerator->generate('handle_image_resize', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $mediaCallback = $urlGenerator->generate('handle_media', [], UrlGeneratorInterface::ABSOLUTE_URL);
         $processPayload = new ProcessPayload(
             'test',
             [
-            'https://cdn.dummyjson.com/products/images/beauty/Powder%20Canister/1.png',
+                'https://cdn.dummyjson.com/products/images/beauty/Powder%20Canister/1.png',
 //            'https://cdn.dummyjson.com/products/images/beauty/Red%20Nail%20Polish/1.png'
-        ], [
+            ], [
             'tiny',
 //                'small', 'medium'
-        ], $callbackUrl);
+        ], mediaCallbackUrl: $mediaCallback,
+            thumbCallbackUrl: $thumbCallback,
+        );
         $form = $this->createForm(ProcessPayloadType::class, $processPayload);
         $form->handleRequest($request);
         // @todo: validate the API key
         if ($form->isSubmitted() && $form->isValid()) {
             // get the payload
+            /** @var ProcessPayload $payload */
             $payload = $form->getData();
             $response = $this->dispatchProcess($payload);
             $results = json_decode($response->getContent());
@@ -80,7 +93,7 @@ class ApiController extends AbstractController implements TokenAuthenticatedCont
 
         return [
             'form' => $form->createView(),
-            'results' => $results??[]
+            'results' => $results ?? []
         ];
     }
 
@@ -88,17 +101,17 @@ class ApiController extends AbstractController implements TokenAuthenticatedCont
      * When a request comes in, populate the media database and return what we know of media.
      * Dispatch download.
      * After download, dispatch resize
-     * @todo: handle tasks, which should be batched and recorded
-     *
      * @param ProcessPayload $payload
      * @param string $_format
      * @return JsonResponse
      * @throws \Symfony\Component\Messenger\Exception\ExceptionInterface
+     * @todo: handle tasks, which should be batched and recorded
+     *
      */
     #[Route('/dispatch_process.{_format}', name: 'app_dispatch_process', methods: ['POST'])]
     public function dispatchProcess(
         #[MapRequestPayload] ProcessPayload $payload,
-        string $_format='json'
+        string                              $_format = 'json'
     ): JsonResponse
     {
         $codes = [];
@@ -133,13 +146,22 @@ class ApiController extends AbstractController implements TokenAuthenticatedCont
                 Media::class,
                 IMediaWorkflow::TRANSITION_DOWNLOAD,
                 workflow: MediaWorkflow::WORKFLOW_NAME,
-                context: ['liip' => $payload->filters]
+                context: [
+                    'liip' => $payload->filters,
+                    'mediaCallbackUrl' => $payload->mediaCallbackUrl,
+                    'thumbCallbackUrl' => $payload->thumbCallbackUrl,
+                ]
             ), [
+//                new TransportNamesStamp('sync')
                 new TransportNamesStamp('download')
             ]);
 
         }
-        $response = $this->normalizer->normalize($listing, 'object', ['groups' => ['media.read','marking']]);
+
+        $response = $this->normalizer->normalize($listing, 'object', ['groups' => ['media.read', 'marking']]);
+        foreach ($response as $mediaData) {
+            $envelope = $this->messageBus->dispatch(new SendWebhookMessage($payload->mediaCallbackUrl, (object)$mediaData));
+        }
 
         return $this->json($response);
     }

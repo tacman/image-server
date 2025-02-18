@@ -137,6 +137,9 @@
             "config/packages/stof_doctrine_extensions.yaml"
         ]
     },
+    "survos/api-grid-bundle": {
+        "version": "1.5.508"
+    },
     "survos/bad-bot-bundle": {
         "version": "0.1"
     },
@@ -161,6 +164,9 @@
     },
     "survos/deployment-bundle": {
         "version": "1.5.418"
+    },
+    "survos/inspection-bundle": {
+        "version": "1.5.508"
     },
     "survos/key-value-bundle": {
         "version": "1.5.241"
@@ -474,6 +480,9 @@
         "files": [
             "config/packages/workflow.yaml"
         ]
+    },
+    "symfonycasts/verify-email-bundle": {
+        "version": "v1.17.3"
     },
     "twig/extra-bundle": {
         "version": "v3.16.0"

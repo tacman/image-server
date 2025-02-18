@@ -14,16 +14,16 @@ framework:
                 retry_strategy:
                     max_retries: 3
                     multiplier: 2
-            low:
-                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-                options:
-                    exchange:
-                        name: low
-                    queues:
-                        low: ~
-                retry_strategy:
-                    max_retries: 3
-                    multiplier: 2
+#            shared:
+#                dsn: '%env(SHARED_MESSENGER_TRANSPORT_DSN)%'
+#                options:
+#                    exchange:
+#                        name: shared
+#                    queues:
+#                        shared: ~
+#                retry_strategy:
+#                    max_retries: 3
+#                    multiplier: 2
             resize:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
@@ -57,9 +57,10 @@ framework:
 #            Symfony\Component\Mailer\Messenger\SendEmailMessage: async
 #            Symfony\Component\Notifier\Message\ChatMessage: async
 #            Symfony\Component\Notifier\Message\SmsMessage: async
-#            App\Message\ResizeImageMessage: resize
+#            App\Message\SendWebhookMessage: low
             Survos\WorkflowBundle\Message\AsyncTransitionMessage: async
-            App\Message\SendWebhookMessage: low
+#            Survos\SaisBundle\Message\MediaUploadMessage: shared
+#            Survos\SaisBundle\Model\MediaModel: shared
 
             # Route your messages to the transports
             # 'App\Message\YourMessage': async

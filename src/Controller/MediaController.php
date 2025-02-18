@@ -32,11 +32,12 @@ class MediaController extends AbstractController
     }
 
 // there must be a way to do this within the bundle, a separate route!
-    #[Route(path: '/transition/{transition}', name: 'medium_transition')]
-    public function transition(Request                                                    $request,
-                               #[Target(IMediaWorkflow::WORKFLOW_NAME)] WorkflowInterface $workflow,
-                               string                                                     $transition,
-                               Media $media): Response
+    #[Route(path: '/transition/{transition}', name: 'media_transition')]
+    public function transition(
+        Request                                                    $request,
+        #[Target(IMediaWorkflow::WORKFLOW_NAME)] WorkflowInterface $workflow,
+        string                                                     $transition,
+        Media                                                      $media): Response
     {
         if ($transition == '_') {
             $transition = $request->request->get('transition'); // the _ is a hack to display the form, @todo: cleanup
@@ -44,14 +45,14 @@ class MediaController extends AbstractController
 
         $this->handleTransitionButtons($workflow, $transition, $media);
         $this->entityManager->flush(); // to save the marking
-        return $this->redirectToRoute('medium_show', $media->getRP());
+        return $this->redirectToRoute('media_show', $media->getRP());
     }
 
     #[Route('/', name: 'media_show', options: ['expose' => true])]
     public function show(Media $media): Response
     {
         return $this->render('media/show.html.twig', [
-            'medium' => $media,
+            'media' => $media,
         ]);
     }
 

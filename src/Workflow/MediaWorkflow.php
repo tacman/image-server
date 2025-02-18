@@ -6,6 +6,7 @@ use App\Entity\Media;
 use App\Entity\Thumb;
 use App\Message\DownloadImage;
 use App\Message\ResizeImageMessage;
+use App\Message\SendWebhookMessage;
 use App\Repository\MediaRepository;
 use App\Repository\ThumbRepository;
 use App\Service\ApiService;
@@ -15,6 +16,9 @@ use League\Flysystem\FilesystemOperator;
 use League\Flysystem\UnableToWriteFile;
 use Liip\ImagineBundle\Service\FilterService;
 use Psr\Log\LoggerInterface;
+use Survos\SaisBundle\Message\MediaUploadMessage;
+use Survos\SaisBundle\Model\DownloadPayload;
+use Survos\SaisBundle\Model\MediaModel;
 use Survos\SaisBundle\Service\SaisClientService;
 use Survos\WorkflowBundle\Attribute\Workflow;
 use Survos\WorkflowBundle\Message\AsyncTransitionMessage;
@@ -90,6 +94,23 @@ class MediaWorkflow implements IMediaWorkflow
     public function onCompleted(CompletedEvent $event): void
     {
         $media = $this->getMedia($event);
+
+        // eventually, when the download is complete, dispatch a webhook
+//        $env = $this->messageBus->dispatch(new MediaModel(
+//            $media->getOriginalUrl(), $media->getRoot(), $media->getPath(), $media->getCode()));
+//        return;
+//
+//        $callbackUrl = match ($media->getRoot()) {
+//            'test' => 'https://sais.wip/handle_media'
+//        };
+//        $envelope = $this->messageBus->dispatch(new SendWebhookMessage($callbackUrl,
+//            new DownloadPayload($media->getCode(), $media->getThumbData())
+//        ));
+//        return;
+////        $this->normalizer->normalize($media, 'object', ['groups' => ['media.read']]),
+//        dd($envelope, $event->getContext(), $media->getMarking());
+
+
         $stamps = [];
         $stamps[] = new TransportNamesStamp('resize');
         foreach ($event->getContext()['liip'] as $filter) {
@@ -98,12 +119,12 @@ class MediaWorkflow implements IMediaWorkflow
                 'liipCode' => $filter,
             ])) {
                 $resized = new Thumb($media, $filter);
-                $media->addResizedImage($resized);
+                $media->addThumb($resized);
                 $this->entityManager->persist($resized);
                 $this->entityManager->flush();
                 $resizedImages[] = $resized;
                 // now dispatch a message to do the resize
-                $this->messageBus->dispatch(new AsyncTransitionMessage(
+                $envelope = $this->messageBus->dispatch(new AsyncTransitionMessage(
                     $resized->getId(),
                     $resized::class,
                     IResizedWorkflow::TRANSITION_RESIZE,
@@ -111,6 +132,8 @@ class MediaWorkflow implements IMediaWorkflow
                 ), $stamps);
             }
         }
+
+        // dispatch the callback request
     }
 
     #[AsTransitionListener(self::WORKFLOW_NAME, IMediaWorkflow::TRANSITION_DOWNLOAD)]

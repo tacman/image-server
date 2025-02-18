@@ -34,19 +34,23 @@ use function Symfony\Component\String\u;
 class ApiService
 {
     public function __construct(
-        private readonly FilesystemOperator     $defaultStorage,
-        private readonly LoggerInterface        $logger,
-        private readonly HttpClientInterface    $httpClient,
-        private readonly EntityManagerInterface $entityManager,
-        private readonly MediaRepository        $mediaRepository,
-        private readonly MessageBusInterface    $messageBus,
+        private readonly LoggerInterface                          $logger,
+        private readonly HttpClientInterface                      $httpClient,
+        private readonly HttpClientInterface                      $localHttpClient,
+        private readonly EntityManagerInterface                   $entityManager,
+        private readonly MediaRepository                          $mediaRepository,
+        private readonly MessageBusInterface                      $messageBus,
         #[Autowire('@liip_imagine.service.filter')]
-        private readonly FilterService          $filterService,
-        private SerializerInterface             $serializer,
-        private NormalizerInterface             $normalizer,
-        #[Autowire('%env(SAIS_API_ENDPOINT)%')] private string $apiEndpoint
-    )
-    {
+        private readonly FilterService                            $filterService,
+        private SerializerInterface                               $serializer,
+        private NormalizerInterface                               $normalizer,
+        #[Autowire('%env(HTTP_PROXY)%')] private readonly ?string $proxyUrl,
+        #[Autowire('%env(SAIS_API_ENDPOINT)%')] private string    $apiEndpoint,
+        private readonly SaisClientService $saisClientService,
+    ) {
+        if ($proxyUrl) {
+            assert(!str_contains($proxyUrl, 'http'), "no scheme in the proxy!");
+        }
     }
 
     #[AsEventListener()]
@@ -81,18 +85,31 @@ class ApiService
     {
         if ($callbackUrl) {
             $content = $this->normalizer->normalize($media);
-            $this->messageBus->dispatch( new SendWebhookMessage($callbackUrl, $content) );
+            $env = $this->messageBus->dispatch( new SendWebhookMessage($callbackUrl, $content) );
+            dd($env);
         }
     }
 
     #[AsMessageHandler()]
     public function onWebhookMessage(SendWebhookMessage $message): void
     {
-        $request = $this->httpClient->request('POST', $message->getCallbackUrl(),
-            [
-            'body' => $message->getData(),
-//            'proxy' => 'http://127.0.0.1:7080'
-        ]);
+        return;
+        $options = [
+            'timeout' => 4,
+            'json' => $this->normalizer->normalize($message->getData()),
+//            'proxy' => $this->proxyUrl,
+        ];
+        $url = $message->getCallbackUrl();
+//        $url = 'https://d5b2-2607-fb91-870-3d2-1769-9a25-d2a2-96b7.ngrok-free.app/handle_media';
+        $url = 'https://md.wip/webhook';
+//        dd($message, $this->proxyUrl, $message->getData(), $options);
+//        $x = file_get_contents($url); dd($x);
+        dump($url, $options);
+        $request = $this->httpClient->request('POST', $url, $options);
+        if ($request->getStatusCode() !== 200) {
+            dd($message, $url, $request->getStatusCode());
+        }
+        dd($request->getStatusCode(), response: $request->toArray());
         $this->logger->info($message->getCallbackUrl() . " returned " . $request->getContent());
     }
 

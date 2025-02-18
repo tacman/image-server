@@ -47,3 +47,19 @@ The image bundle can get the list of available filters, or configure only certai
 
 
 images are served from the imageserver
+
+curl \
+--compressed \
+--request CONNECT \
+--url 'https://sais.wip/handle_media' \
+--header 'Proxy-Connection: Keep-Alive' \
+--data-raw '{"thumbData":{"tiny":{"url":"https:\/\/sais.wip\/media\/cache\/tiny\/test\/b5\/34\/70c4d6e0576d.png","size":1338}},"blur":"EgiCBQAiiHZ3mIqlCAeFhmA3CKd2iHGciA","code":"b53470c4d6e0576d","path":"test\/b5\/34\/70c4d6e0576d.png","originalUrl":"https:\/\/cdn.dummyjson.com\/products\/images\/beauty\/Powder%20Canister\/1.png","marking":"downloaded"}'
+
+
+curl \
+
+--compressed \
+--request CONNECT \
+--url 'https://sais.wip/handle_media' \
+--header 'Proxy-Connection: Keep-Alive' \
+--data-raw '{"thumbData":{"tiny":{"url":"https:\/\/sais.wip\/media\/cache\/tiny\/test\/b5\/34\/70c4d6e0576d.png","size":1338}},"blur":"EgiCBQAiiHZ3mIqlCAeFhmA3CKd2iHGciA","code":"b53470c4d6e0576d","path":"test\/b5\/34\/70c4d6e0576d.png","originalUrl":"https:\/\/cdn.dummyjson.com\/products\/images\/beauty\/Powder%20Canister\/1.png","marking":"downloaded"}'

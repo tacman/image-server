@@ -32,17 +32,21 @@ class ProcessPayloadType extends AbstractType
 
             ])
             ->add('filters', TextareaType::class, [
+                'help' => 'liip filters configured for sais',
                 'attr' => [
                     'cols' => 10,
                     'rows' => 3,
                 ]
 
             ])
-            ->add('callbackUrl', UrlType::class, [
+            ;
+        foreach (['thumbCallbackUrl','mediaCallbackUrl'] as $callback) {
+            $builder
+            ->add($callback, UrlType::class, [
                 'default_protocol' => 'https',
                 'required' => false,
-            ])
-        ;
+            ]);
+        }
 
         $builder->get('images')
             ->addModelTransformer(new CallbackTransformer(

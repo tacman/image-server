@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Media;
+use App\Entity\Thumb;
 use App\Form\ProcessPayloadType;
 use App\Repository\MediaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Survos\SaisBundle\Model\ProcessPayload;
 use Survos\SaisBundle\Service\SaisClientService;
 use Survos\ThumbHashBundle\Service\BlurService;
@@ -13,11 +16,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Thumbhash\Thumbhash;
 
 class ClientController extends AbstractController
 {
+
+
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+    )
+    {
+    }
 
     #[Route('/status', name: 'app_status')]
     public function status(): array|JsonResponse
@@ -33,8 +44,16 @@ class ClientController extends AbstractController
      */
     #[Route('/', name: 'app_homepage')]
     #[Template('homepage.html.twig')]
-    public function index(MediaRepository $mediaRepository): array
+    public function index(MediaRepository $mediaRepository,
+    #[MapQueryParameter] int $limit = 5
+    ): array
     {
+        foreach ([Media::class, Thumb::class] as $class) {
+            $repo = $this->entityManager->getRepository($class);
+            $counts[$class] = $repo->count();
+
+//            $data = $repo->findBy([], ['createdAt' => 'DESC'], 10);
+        }
 
 
 //        $content = file_get_contents('https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/1.png');
@@ -54,7 +73,10 @@ class ClientController extends AbstractController
 //        }
 //        dd($width, $height, $hash, $key, $url);
 
-        return ['rows' => $mediaRepository->findBy([], ['createdAt' => 'ASC'], 30)];
+        return [
+            'counts' => $counts,
+
+            'rows' => $mediaRepository->findBy([], ['createdAt' => 'DESC'], 30)];
     }
 
 

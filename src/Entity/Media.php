@@ -2,6 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\MediaRepository;
 use App\Workflow\IMediaWorkflow;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,6 +27,22 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Thumbhash\Thumbhash;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(
+            normalizationContext: ['groups' => ['media.read']],
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['media.read']],
+        )
+    ]
+)]
+#[ApiFilter(filterClass: SearchFilter::class, properties: [
+    'root' => 'exact',
+    'marking' => 'exact',
+])]
+#[ApiFilter(filterClass: DateFilter::class, properties: ['createdAt','updatedAt'])]
+#[ApiFilter(filterClass: OrderFilter::class, properties: ['createdAt','updatedAt'])]
 class Media implements MarkingInterface, \Stringable, RouteParametersInterface, IMediaWorkflow
 {
     use MarkingTrait;
@@ -63,6 +87,7 @@ class Media implements MarkingInterface, \Stringable, RouteParametersInterface, 
         #[ORM\Id]
         #[ORM\Column(length: 255)]
         #[Groups(['media.read'])]
+        #[ApiProperty(identifier: true)]
         private ?string         $code=null, // includes root!
         #[ORM\Column(length: 255, nullable: true)]
         #[Groups(['media.read'])]
@@ -168,6 +193,7 @@ class Media implements MarkingInterface, \Stringable, RouteParametersInterface, 
                 'url' => $url
                 ];
         }
+        // @todo: sort by size?
         $this->setThumbData($filters);
         return $this;
 
@@ -205,7 +231,7 @@ class Media implements MarkingInterface, \Stringable, RouteParametersInterface, 
         return $this->thumbs;
     }
 
-    public function addResizedImage(Thumb $resizedImage): static
+    public function addThumb(Thumb $resizedImage): static
     {
         if (!$this->thumbs->contains($resizedImage)) {
             $this->thumbs->add($resizedImage);
@@ -215,7 +241,7 @@ class Media implements MarkingInterface, \Stringable, RouteParametersInterface, 
         return $this;
     }
 
-    public function removeResizedImage(Thumb $resizedImage): static
+    public function removeThumb(Thumb $resizedImage): static
     {
         if ($this->thumbs->removeElement($resizedImage)) {
             // set the owning side to null (unless already changed)
@@ -249,6 +275,7 @@ class Media implements MarkingInterface, \Stringable, RouteParametersInterface, 
         return Thumbhash::convertStringToHash($this->getBlur());
     }
 
+    #[ApiProperty(identifier: false)]
     public function getId(): string
     {
         return $this->getCode();

@@ -16,7 +16,7 @@ class BrowseController extends AbstractController
 
     public function __construct(
         private MediaRepository $mediaRepository,
-        private ThumbRepository $resizedRepository
+        private ThumbRepository $thumbRepository
     )
     {
     }
@@ -33,7 +33,7 @@ class BrowseController extends AbstractController
     public function thumbs(): Response
     {
         return $this->render('browse/thumbs.html.twig', [
-            'rows' => $this->thumbsRepository->findBy([], ['id' => 'DESC'], 40),
+            'rows' => $this->thumbRepository->findBy([], ['id' => 'DESC'], 40),
             'controller_name' => 'thumbsController',
         ]);
     }

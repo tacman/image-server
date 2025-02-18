@@ -6,12 +6,12 @@ workers:
 #  yarn_encore_watch: ~
 
 #   built-in command that starts messenger consumer
-#  messenger_consume_sais:
-#       cmd: ['symfony', 'console', 'messenger:consume', 'download']
-#       watch: ['config', 'src', 'templates', 'vendor']
-#  messenger_consume_resize:
-#    cmd: ['symfony', 'console', 'messenger:consume', 'resize']
-#    watch: ['config', 'src', 'templates', 'vendor']
+  messenger_consume_sais:
+       cmd: ['symfony', 'console', 'messenger:consume', 'download']
+       watch: ['config', 'src', 'templates', 'vendor']
+  messenger_consume_resize:
+    cmd: ['symfony', 'console', 'messenger:consume', 'resize']
+    watch: ['config', 'src', 'templates', 'vendor']
 
 #  messenger_consume_async: ~
 

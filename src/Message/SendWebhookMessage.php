@@ -2,25 +2,26 @@
 
 namespace App\Message;
 
-use Liip\ImagineBundle\Service\FilterService;
+use Survos\SaisBundle\Model\DownloadPayload;
+use Survos\SaisBundle\Model\ThumbPayload;
 
 final class SendWebhookMessage
 {
 
      public function __construct(
          private ?string $callbackUrl,
-         private array $data
+         private object $payload,
      ) {
      }
 
-    public function getCallbackUrl(): string
+    public function getCallbackUrl(): ?string
     {
         return $this->callbackUrl;
     }
 
-    public function getData(): array
+    public function getData(): object
     {
-        return $this->data;
+        return $this->payload;
     }
 
 }

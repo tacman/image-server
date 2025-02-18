@@ -53,7 +53,7 @@ class MediaCollectionController extends AbstractController
             context: $context ?? [])
         ;
 
-        return $this->render('media/browse.html.twig', [
+        return $this->render('browse/media.html.twig', [
             'class' => $class,
             'useMeili' => $useMeili,
             'apiCall' => $apiCall,
