@@ -25,6 +25,6 @@ when@test:
 
 when@dev:
     framework:
-    router:
-        default_uri: 'https://sais.wip'
+        router:
+            default_uri: 'https://sais.wip'
 
