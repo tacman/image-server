@@ -39,7 +39,7 @@ class HttpGetCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $url = $input->getArgument('url');
         $response = $this->httpClient->request('GET', $url, [
-            'proxy' => '127.0.0.1:7080',
+//            'proxy' => '127.0.0.1:7080',
         ]);
         $io->write("Fetching url: {$url}");
         if ($response->getStatusCode() !== 200) {
