@@ -5,7 +5,7 @@ framework:
     # Note that the session will be started ONLY if you read or write from it.
     session: true
     router:
-        default_uri: 'https://sais.wip'
+        default_uri: 'https://sais.survos.com'
 
     #esi: true
     #fragments: true
@@ -23,4 +23,8 @@ when@test:
         session:
             storage_factory_id: session.storage.factory.mock_file
 
+when@dev:
+    framework:
+    router:
+        default_uri: 'https://sais.wip'
 
