@@ -23,6 +23,7 @@ use Survos\SaisBundle\Service\SaisClientService;
 use Survos\WorkflowBundle\Attribute\Workflow;
 use Survos\WorkflowBundle\Message\AsyncTransitionMessage;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\TransportNamesStamp;
@@ -34,6 +35,7 @@ use Symfony\Component\Workflow\Attribute\AsTransitionListener;
 use Symfony\Component\Workflow\Event\CompletedEvent;
 use Symfony\Component\Workflow\Event\GuardEvent;
 use Symfony\Component\Workflow\Event\TransitionEvent;
+use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use function Symfony\Component\String\u;
 
@@ -45,12 +47,13 @@ class MediaWorkflow implements IMediaWorkflow
     public function __construct(
         private MessageBusInterface          $messageBus,
         private EntityManagerInterface       $entityManager,
-        private ThumbRepository              $resizedRepository,
+        private ThumbRepository              $thumbRepository,
         private readonly FilesystemOperator  $defaultStorage,
         private readonly LoggerInterface     $logger,
         private readonly HttpClientInterface $httpClient,
         private readonly ApiService          $apiService,
         private readonly MediaRepository     $mediaRepository,
+        #[Target(Thumb::WORKFLOW_NAME)] private WorkflowInterface $thumbWorkflow,
 
         #[Autowire('@liip_imagine.service.filter')]
         private readonly FilterService       $filterService,
@@ -94,6 +97,7 @@ class MediaWorkflow implements IMediaWorkflow
     public function onCompleted(CompletedEvent $event): void
     {
         $media = $this->getMedia($event);
+        $this->resizeMedia($media, $event->getContext()['liipCodes']);
 
         // eventually, when the download is complete, dispatch a webhook
 //        $env = $this->messageBus->dispatch(new MediaModel(
@@ -111,33 +115,47 @@ class MediaWorkflow implements IMediaWorkflow
 //        dd($envelope, $event->getContext(), $media->getMarking());
 
 
-        $stamps = [];
-        $stamps[] = new TransportNamesStamp('resize');
-        foreach ($event->getContext()['liip'] as $filter) {
-            if (!$resized = $this->resizedRepository->findOneBy([
-                'media' => $media,
-                'liipCode' => $filter,
-            ])) {
-                $resized = new Thumb($media, $filter);
-                $media->addThumb($resized);
-                $this->entityManager->persist($resized);
-                $this->entityManager->flush();
-                $resizedImages[] = $resized;
-                // now dispatch a message to do the resize
-                $envelope = $this->messageBus->dispatch(new AsyncTransitionMessage(
-                    $resized->getId(),
-                    $resized::class,
-                    IResizedWorkflow::TRANSITION_RESIZE,
-                    IResizedWorkflow::WORKFLOW_NAME,
-                ), $stamps);
-            }
-        }
 
         // dispatch the callback request
     }
 
+    private function resizeMedia(Media $media, array $liipCodes): void
+    {
+        $stamps = [];
+        $stamps[] = new TransportNamesStamp('resize');
+        foreach ($liipCodes as $filter) {
+            if (!$thumb = $this->thumbRepository->findOneBy([
+                'media' => $media,
+                'liipCode' => $filter,
+            ])) {
+                $thumb = new Thumb($media, $filter);
+                $media->addThumb($thumb);
+                $this->entityManager->persist($thumb);
+                $this->entityManager->flush();
+            }
+            $resizedImages[] = $thumb;
+            if ($this->thumbWorkflow->can($thumb, $thumb::TRANSITION_RESIZE)) {
+                // now dispatch a message to do the resize
+                $envelope = $this->messageBus->dispatch(new AsyncTransitionMessage(
+                    $thumb->getId(),
+                    $thumb::class,
+                    ThumbWorkflowInterface::TRANSITION_RESIZE,
+                    ThumbWorkflowInterface::WORKFLOW_NAME,
+                ), $stamps);
+            }
+        }
+
+    }
+
+    #[AsTransitionListener(self::WORKFLOW_NAME, IMediaWorkflow::TRANSITION_RESIZE)]
+    public function onResize(TransitionEvent $event): void
+    {
+        $media = $this->getMedia($event);
+        $this->resizeMedia($media, ['tiny','medium','large']);
+    }
+
     #[AsTransitionListener(self::WORKFLOW_NAME, IMediaWorkflow::TRANSITION_DOWNLOAD)]
-    public function onTransition(TransitionEvent $event): void
+    public function onDownload(TransitionEvent $event): void
     {
         /** @var Media media */
         $media = $this->getMedia($event);
@@ -177,7 +195,7 @@ class MediaWorkflow implements IMediaWorkflow
         // @todo: filters, dispatch a synced message since we're in the download
         foreach ($message->getFilters() as $filter) {
 
-            if (!$resized = $this->resizedRepository->findOneBy([
+            if (!$resized = $this->thumbRepository->findOneBy([
                 'media' => $media,
                 'liipCode' => $filter
             ])) {

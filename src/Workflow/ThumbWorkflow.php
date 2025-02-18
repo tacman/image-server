@@ -19,7 +19,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Thumbhash\Thumbhash;
 
 #[Workflow(supports: [Thumb::class], name: self::WORKFLOW_NAME)]
-class ThumbWorkflow implements IResizedWorkflow
+class ThumbWorkflow implements ThumbWorkflowInterface
 {
 	public const WORKFLOW_NAME = 'ThumbWorkflow';
 

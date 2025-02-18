@@ -4,14 +4,14 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ThumbRepository;
-use App\Workflow\IResizedWorkflow;
+use App\Workflow\ThumbWorkflowInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\WorkflowBundle\Traits\MarkingInterface;
 use Survos\WorkflowBundle\Traits\MarkingTrait;
 
 #[ORM\Entity(repositoryClass: ThumbRepository::class)]
 #[ApiResource]
-class Thumb implements MarkingInterface, \Stringable
+class Thumb implements MarkingInterface, \Stringable, ThumbWorkflowInterface
 {
     use MarkingTrait;
 

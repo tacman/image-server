@@ -5,7 +5,7 @@ namespace App\Workflow;
 use Survos\WorkflowBundle\Attribute\Place;
 use Survos\WorkflowBundle\Attribute\Transition;
 
-interface IResizedWorkflow
+interface ThumbWorkflowInterface
 {
 	public const WORKFLOW_NAME = 'ThumbWorkflow';
 

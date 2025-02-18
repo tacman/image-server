@@ -21,6 +21,6 @@ interface IMediaWorkflow
 	#[Transition(from: [self::PLACE_NEW, self::PLACE_DOWNLOADED], to: self::PLACE_DOWNLOADED)]
 	public const TRANSITION_DOWNLOAD = 'download';
 
-	#[Transition(from: [self::PLACE_DOWNLOADED], to: self::PLACE_RESIZED)]
+	#[Transition(from: [self::PLACE_DOWNLOADED, self::PLACE_RESIZED], to: self::PLACE_RESIZED)]
 	public const TRANSITION_RESIZE = 'resize';
 }
