@@ -10,6 +10,7 @@
         "ext-amqp": "*",
         "ext-apcu": "*",
         "ext-ctype": "*",
+        "ext-exif": "*",
         "ext-fileinfo": "*",
         "ext-imagick": "*",
         "ext-intl": "*",
@@ -32,18 +33,17 @@
         "paragonie/sodium_compat": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.6.1",
         "phpstan/phpdoc-parser": "^2.1.0",
-        "srwiez/thumbhash": "^1.3",
         "stof/doctrine-extensions-bundle": "^1.13",
-        "survos/api-grid-bundle": ">=1.5.512",
-        "survos/bad-bot-bundle": "^1.5.512",
-        "survos/bootstrap-bundle": "^1.5.512",
-        "survos/command-bundle": "^1.5.512",
-        "survos/key-value-bundle": "^1.5.512",
-        "survos/sais-bundle": "^1.5.512",
-        "survos/simple-datatables-bundle": "^1.5.512",
-        "survos/storage-bundle": "^1.5.512",
-        "survos/thumb-hash-bundle": "^1.5.512",
-        "survos/workflow-helper-bundle": ">=1.5.512",
+        "survos/api-grid-bundle": ">=1.5.517",
+        "survos/bad-bot-bundle": "^1.5.517",
+        "survos/bootstrap-bundle": "^1.5.517",
+        "survos/command-bundle": "^1.5.517",
+        "survos/key-value-bundle": "^1.5.517",
+        "survos/sais-bundle": "^1.5.517",
+        "survos/simple-datatables-bundle": "^1.5.517",
+        "survos/storage-bundle": "^1.5.517",
+        "survos/thumb-hash-bundle": "dev-main",
+        "survos/workflow-helper-bundle": ">=1.5.517",
         "symfony/amqp-messenger": "^7.2.3",
         "symfony/asset": "^7.2",
         "symfony/asset-mapper": "^7.2.3",
@@ -76,8 +76,7 @@
         "symfonycasts/verify-email-bundle": "^1.17.3",
         "twig/extra-bundle": "^3.20",
         "twig/twig": "^3.20",
-        "zenstruck/class-metadata": "^1.1",
-      "ext-exif": "*"
+        "zenstruck/class-metadata": "^1.1"
     },
     "config": {
         "allow-plugins": {
@@ -143,8 +142,8 @@
         "maximebf/debugbar": "^2.1.3",
         "phpunit/phpunit": "^11.5.8",
         "pierstoval/smoke-testing": ">=1.2@dev",
-        "survos/deployment-bundle": "^1.5.512",
-        "survos/maker-bundle": "^1.5.512",
+        "survos/deployment-bundle": "^1.5.517",
+        "survos/maker-bundle": "^1.5.517",
         "symfony/browser-kit": "^7.2",
         "symfony/css-selector": "^7.2",
         "symfony/debug-bundle": "^7.2",
@@ -152,5 +151,11 @@
         "symfony/phpunit-bridge": "^7.2",
         "symfony/stopwatch": "^7.2.2",
         "symfony/web-profiler-bundle": "^7.2.3"
+    },
+    "repositories": {
+        "thumbhash": {
+            "type": "vcs",
+            "url": "git@github.com:tacman/thumbhash.git"
+        }
     }
 }

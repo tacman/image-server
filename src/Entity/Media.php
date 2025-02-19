@@ -20,21 +20,21 @@ use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Survos\SaisBundle\Service\SaisClientService;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Survos\ThumbHashBundle\Service\Thumbhash;
 use Survos\WorkflowBundle\Traits\MarkingInterface;
 use Survos\WorkflowBundle\Traits\MarkingTrait;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
-use Thumbhash\Thumbhash;
 use Zenstruck\Alias;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
 #[ApiResource(
     operations: [
         new Get(
-            normalizationContext: ['groups' => ['media.read']],
+            normalizationContext: ['groups' => ['media.read', 'marking']],
         ),
         new GetCollection(
-            normalizationContext: ['groups' => ['media.read']],
+            normalizationContext: ['groups' => ['media.read', 'marking']],
         )
     ]
 )]
@@ -104,6 +104,7 @@ class Media implements MarkingInterface, \Stringable, RouteParametersInterface, 
      */
     public function __construct(
         #[ORM\Column(length: 32, nullable: false)]
+        #[Groups(['media.read'])]
         private readonly string $root,
 
         #[ORM\Id]

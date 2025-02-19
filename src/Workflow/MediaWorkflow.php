@@ -160,7 +160,7 @@ class MediaWorkflow implements IMediaWorkflow
     public function onResize(TransitionEvent $event): void
     {
         $media = $this->getMedia($event);
-        $this->resizeMedia($media, ['tiny','medium','large']);
+        $this->resizeMedia($media, ['tiny','small', 'medium','large']);
     }
 
     /**
@@ -199,7 +199,7 @@ class MediaWorkflow implements IMediaWorkflow
         $ext = pathinfo($uri, PATHINFO_EXTENSION);
 //        dd($ext, $url, $uri);
         // if there's no ext, it's a lot more work to get it from the image itself!
-        assert($ext, "@todo: handle missing extension " . $media->getOriginalUrl());
+//        assert($ext, "@todo: handle missing extension " . $media->getOriginalUrl());
 
         // upload it to long-term storage
         if (!$this->defaultStorage->has($path)) {

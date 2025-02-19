@@ -36,7 +36,14 @@
                                 <td>
                                     {{ size }}
                                 </td>
-                                <td>{{ data.url|default('') }}</td>
+                                <td>
+                                    {% set url = data.url|default(false) %}
+                                    {% if url %}
+                                    <a href="{{ url }}" target="_blank">
+                                        {{ url }}
+                                    </a>
+                                    {% endif %}
+                                </td>
                                 <td>{{ data.size|default('') }}</td>
                             </tr>
                         {% endfor %}

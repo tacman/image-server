@@ -16,8 +16,7 @@ use Symfony\Component\Workflow\Attribute\AsTransitionListener;
 use Symfony\Component\Workflow\Event\GuardEvent;
 use Symfony\Component\Workflow\Event\TransitionEvent;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Thumbhash\Thumbhash;
-
+use Survos\ThumbHashBundle\Service\Thumbhash;
 #[Workflow(supports: [Thumb::class], name: self::WORKFLOW_NAME)]
 class ThumbWorkflow implements ThumbWorkflowInterface
 {
@@ -109,7 +108,7 @@ class ThumbWorkflow implements ThumbWorkflowInterface
         list($width, $height, $pixels) = $service->extract_size_and_pixels_with_imagick($content);
 
         if ($filter == 'tiny') {
-            $hash = Thumbhash::RGBAToHash($width, $height, $pixels);
+            $hash = Thumbhash::RGBAToHash($width, $height, $pixels, 150, 150);
             $key = Thumbhash::convertHashToString($hash); // You can store this in your database as a string
             $media
                 ->setBlur($key);
