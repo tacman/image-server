@@ -194,7 +194,15 @@ class MediaWorkflow implements IMediaWorkflow
 
         // upload it to long-term storage
         if (!$this->defaultStorage->has($path)) {
-            $this->uploadUrl($tempFile, $path);
+            try {
+                $this->uploadUrl($tempFile, $path);
+                $this->logger->warning(sprintf('Upload url: %s', $path));
+            } catch (FilesystemException|UnableToWriteFile $exception) {
+                // handle the error
+                $this->logger->error($exception->getMessage());
+                return; // transition?
+            }
+
             $this->logger->info("$url downloaded to " . $path);
         } else {
             $this->logger->info("$url already exists as  $path");
@@ -205,6 +213,7 @@ class MediaWorkflow implements IMediaWorkflow
             ->setOriginalUrl($url)
             ->setMimeType($mimeType)
             ->setSize(filesize($tempFile));
+        unlink($tempFile); // so it doesn't fill up the disk
 
         return;
 
@@ -236,22 +245,22 @@ class MediaWorkflow implements IMediaWorkflow
 //        );
     }
 
+
+    /**
+     * @param string $tempFile
+     * @param string $code
+     * @return void
+     * @throws FilesystemException
+     */
     private function uploadUrl(string $tempFile, string $code): void
     {
         $stream = fopen($tempFile, 'r');
-
-        try {
-            $config = []; // visibility?
-            $directory = pathinfo($code, PATHINFO_DIRNAME);
-            if (!$this->defaultStorage->directoryExists($directory)) {
-                $this->defaultStorage->createDirectory($directory);
-            }
-            $this->defaultStorage->writeStream($code, $stream, $config);
-        } catch (FilesystemException|UnableToWriteFile $exception) {
-            // handle the error
-            $this->logger->error($exception->getMessage());
-            dd($exception, $code);
+        $config = []; // visibility?
+        $directory = pathinfo($code, PATHINFO_DIRNAME);
+        if (!$this->defaultStorage->directoryExists($directory)) {
+            $this->defaultStorage->createDirectory($directory);
         }
+        $this->defaultStorage->writeStream($code, $stream, $config);
 
     }
 
