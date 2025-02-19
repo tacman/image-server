@@ -173,24 +173,33 @@ class MediaWorkflow implements IMediaWorkflow
         /** @var Media media */
         $media = $this->getMedia($event);
         $url = $media->getOriginalUrl();
+//        $url = 'https://ciim-public-media-s3.s3.eu-west-2.amazonaws.com/ramm/41_2005_3_2.jpg';
+//        $url = 'https://coleccion.museolarco.org/public/uploads/ML038975/ML038975a_1733785969.webp';
+//        $media->setOriginalUrl($url);
+        // we use the original extension
 
         $path = $media->getRoot() . '/' . SaisClientService::calculatePath($media->getCode());
-        $tempFile = $media->getCode() . '.' . pathinfo($url, PATHINFO_EXTENSION);// no dirs
+        $tempFile = tempnam("/tmp", $path);
+//        $tempFile = $media->getCode() . '.' . pathinfo($url, PATHINFO_EXTENSION);// no dirs
+
         $media->setStatusCode(200);
-        if (!file_exists($tempFile)) {
+//        dd($tempFile);
+        // if we have size, we've already downloaded the important data.
+        if (!$media->getSize())
+        {
             try {
                 $this->downloadUrl($url, $tempFile);
+                $this->processTempFile($tempFile, $media);
             } catch (\Exception $e) {
                 $media->setStatusCode($e->getCode());
                 return;
             }
         }
-
-        $content = file_get_contents($tempFile);
-
-        $mimeType = mime_content_type($tempFile);
-        $ext = pathinfo($url, PATHINFO_EXTENSION);
-        $path .= '.' . ($ext ?: u($mimeType)->after('image/'));
+        $uri = parse_url($url, PHP_URL_PATH);
+        $ext = pathinfo($uri, PATHINFO_EXTENSION);
+//        dd($ext, $url, $uri);
+        // if there's no ext, it's a lot more work to get it from the image itself!
+        assert($ext, "@todo: handle missing extension " . $media->getOriginalUrl());
 
         // upload it to long-term storage
         if (!$this->defaultStorage->has($path)) {
@@ -211,9 +220,11 @@ class MediaWorkflow implements IMediaWorkflow
         $media
             ->setPath($path)
             ->setOriginalUrl($url)
-            ->setMimeType($mimeType)
-            ->setSize(filesize($tempFile));
+            ;
+        // we're done, so delete the temp file
         unlink($tempFile); // so it doesn't fill up the disk
+
+
 
         return;
 
@@ -243,6 +254,35 @@ class MediaWorkflow implements IMediaWorkflow
 //                $event->getContext()['callbackUrl'] ?? null
 //            )
 //        );
+    }
+
+    private function processTempFile(string $tempFile, Media $media): void
+    {
+        $content = file_get_contents($tempFile);
+        $mimeType = mime_content_type($tempFile);
+//        $size = getimagesize($media->getOriginalUrl(), $info);
+        [$width, $height, $type, $attr]  = getimagesize($tempFile, $info);
+        $exif = exif_read_data($tempFile);
+//        dd($exif, $height, $width, $type, $attr, $tempFile);
+
+        // free, but inconsistent sizes.
+//        if (exif_thumbnail($tempFile, $width, $height, $type)) {
+//            dd($type, $height, $width, $mimeType, $media->getOriginalUrl());
+//        } else {
+//            // maybe it's a PDF?
+//        }
+//        dd(filesize($tempFile));
+
+        // maybe someday: https://github.com/brianmcdo/ImagePalette?tab=readme-ov-file
+        $media
+            ->setOriginalWidth($width)
+            ->setOriginalHeight($height)
+            ->setExif($exif)
+            ->setMimeType($mimeType) // the actual mime type
+            ->setSize(filesize($tempFile));
+//        dd($media, $exif, $mimeType, $width, $height);
+
+
     }
 
 

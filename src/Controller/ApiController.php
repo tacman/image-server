@@ -72,7 +72,7 @@ class ApiController extends AbstractController implements TokenAuthenticatedCont
         $processPayload = new ProcessPayload(
             'test',
             [
-                'https://cdn.dummyjson.com/products/images/beauty/Powder%20Canister/1.png',
+                'https://asset.museum-digital.org/rlp/images/201212/14120104912.jpg',
 //            'https://cdn.dummyjson.com/products/images/beauty/Red%20Nail%20Polish/1.png'
             ], [
             'tiny',

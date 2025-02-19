@@ -52,9 +52,11 @@ class Media implements MarkingInterface, \Stringable, RouteParametersInterface, 
     public const UNIQUE_PARAMETERS = ['mediaId' => 'code'];
 
     #[ORM\Column(length: 16, nullable: true)]
+    #[Groups(['media.read'])]
     private ?string $mimeType = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['media.read'])]
     private ?int $size = null;
 
     #[ORM\Column(nullable: true, options: ['jsonb' => true])]
@@ -82,6 +84,20 @@ class Media implements MarkingInterface, \Stringable, RouteParametersInterface, 
     #[ORM\Column(nullable: true)]
     #[Groups(['media.read'])]
     private ?int $statusCode = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['media.read'])]
+    private ?int $originalHeight = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['media.read'])]
+    private ?int $originalWidth = null;
+
+    #[ORM\Column(length: 4, nullable: true)]
+    private ?string $ext = null;
+
+    #[ORM\Column(nullable: true, options: ['jsonb' => true])]
+    private ?array $exif = null;
 
     /**
      * @param string|null $path
@@ -295,6 +311,54 @@ class Media implements MarkingInterface, \Stringable, RouteParametersInterface, 
     public function setStatusCode(?int $statusCode): static
     {
         $this->statusCode = $statusCode;
+
+        return $this;
+    }
+
+    public function getOriginalHeight(): ?int
+    {
+        return $this->originalHeight;
+    }
+
+    public function setOriginalHeight(?int $originalHeight): static
+    {
+        $this->originalHeight = $originalHeight;
+
+        return $this;
+    }
+
+    public function getOriginalWidth(): ?int
+    {
+        return $this->originalWidth;
+    }
+
+    public function setOriginalWidth(?int $originalWidth): static
+    {
+        $this->originalWidth = $originalWidth;
+
+        return $this;
+    }
+
+    public function getExt(): ?string
+    {
+        return $this->ext;
+    }
+
+    public function setExt(?string $ext): static
+    {
+        $this->ext = $ext;
+
+        return $this;
+    }
+
+    public function getExif(): ?array
+    {
+        return $this->exif;
+    }
+
+    public function setExif(?array $exif): static
+    {
+        $this->exif = $exif;
 
         return $this;
     }

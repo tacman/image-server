@@ -22,11 +22,27 @@
             </tr>
             <tr>
                 <th>Size</th>
-                <td>{{ media.size }}</td>
+                <td>{{ media.size }} bytes
+                    {{ media.originalHeight }} x {{ media.originalWidth }}
+                </td>
             </tr>
             <tr>
                 <th>thumbData</th>
-                <td>{{ media.thumbData ? media.thumbData|json_encode : '' }}</td>
+                <td>
+                    <table>
+                        <tbody>
+                        {% for size,data in media.thumbData|default([]) %}
+                            <tr>
+                                <td>
+                                    {{ size }}
+                                </td>
+                                <td>{{ data.url|default('') }}</td>
+                                <td>{{ data.size|default('') }}</td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
             </tr>
             <tr>
                 <th>CreatedAt</th>
