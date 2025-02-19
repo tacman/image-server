@@ -262,7 +262,6 @@ class MediaWorkflow implements IMediaWorkflow
         $mimeType = mime_content_type($tempFile);
 //        $size = getimagesize($media->getOriginalUrl(), $info);
         [$width, $height, $type, $attr]  = getimagesize($tempFile, $info);
-        $exif = exif_read_data($tempFile);
 //        dd($exif, $height, $width, $type, $attr, $tempFile);
 
         // free, but inconsistent sizes.
@@ -277,11 +276,17 @@ class MediaWorkflow implements IMediaWorkflow
         $media
             ->setOriginalWidth($width)
             ->setOriginalHeight($height)
-            ->setExif($exif)
             ->setMimeType($mimeType) // the actual mime type
             ->setSize(filesize($tempFile));
 //        dd($media, $exif, $mimeType, $width, $height);
 
+//        {"message":"Error thrown while handling message Survos\\WorkflowBundle\\Message\\AsyncTransitionMessage. Removing from transport after 3 retries. Error: \"Handling \"Survos\\WorkflowBundle\\Message\\AsyncTransitionMessage\" failed: An exception occurred while executing a query: SQLSTATE[22P05]: Untranslatable character: 7 ERROR:  unsupported Unicode escape sequence\nDETAIL:  \\u0000 cannot be converted to text.\nCONTEXT:  JSON data, line 1: ...h\":16,\"FocalLength\":\"58\\/1\",\"UserComment\":\"\\u0000...\nunnamed portal parameter $6 = '...'\"","context":{"class":"Survos\\WorkflowBundle\\Message\\AsyncTransitionMessage","message_id":null,"retryCount":3,"error":"Handling \"Survos\\WorkflowBundle\\Message\\AsyncTransitionMessage\" failed: An exception occurred while executing a query: SQLSTATE[22P05]: Untranslatable character: 7 ERROR:  unsupported Unicode escape sequence\nDETAIL:  \\u0000 cannot be converted to text.\nCONTEXT:  JSON data, line 1: ...h\":16,\"FocalLength\":\"58\\/1\",\"UserComment\":\"\\u0000...\nunnamed portal parameter $6 = '...'","exception":{"class":"Symfony\\Component\\Messenger\\Exception\\HandlerFailedException","message":"Handling \"Survos\\WorkflowBundle\\Message\\AsyncTransitionMessage\" failed: An exception occurred while executing a query: SQLSTATE[22P05]: Untranslatable character: 7 ERROR:  unsupported Unicode escape sequence\nDETAIL:  \\u0000 cannot be converted to text.\nCONTEXT:  JSON data, line 1: ...h\":16,\"FocalLength\":\"58\\/1\",\"UserComment\":\"\\u0000...\nunnamed portal parameter $6 = '...'","code":7,"file":"/app/vendor/symfony/messenger/Middleware/HandleMessageMiddleware.php:124","previous":{"class":"Doctrine\\DBAL\\Exception\\DriverException","message":"An exception occurred while executing a query: SQLSTATE[22P05]: Untranslatable character: 7 ERROR:  unsupported Unicode escape sequence\nDETAIL:  \\u0000 cannot be converted to text.\nCONTEXT:  JSON data, line 1: ...h\":16,\"FocalLength\":\"58\\/1\",\"UserComment\":\"\\u0000...\nunnamed portal parameter $6 = '...'","code":7,"file":"/app/vendor/doctrine/dbal/src/Driver/API/PostgreSQL/ExceptionConverter.php:80","previous":{"class":"Doctrine\\DBAL\\Driver\\PDO\\Exception","message":"SQLSTATE[22P05]: Untranslatable character: 7 ERROR:  unsupported Unicode escape sequence\nDETAIL:  \\u0000 cannot be converted to text.\nCONTEXT:  JSON data, line 1: ...h\":16,\"FocalLength\":\"58\\/1\",\"UserComment\":\"\\u0000...\nunnamed portal parameter $6 = '...'","code":7,"file":"/app/vendor/doctrine/dbal/src/Driver/PDO/Exception.php:24","previous":{"class":"PDOException","message":"SQLSTATE[22P05]: Untranslatable character: 7 ERROR:  unsupported Unicode escape sequence\nDETAIL:  \\u0000 cannot be converted to text.\nCONTEXT:  JSON data, line 1: ...h\":16,\"FocalLength\":\"58\\/1\",\"UserComment\":\"\\u0000...\nunnamed portal para
+
+        // problems encoding exif
+        if (0) {
+            $exif = exif_read_data($tempFile);
+            $media->setExif($exif);
+        }
 
     }
 
