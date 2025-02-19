@@ -5,12 +5,15 @@ namespace App\Repository;
 use App\Entity\Thumb;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Survos\CoreBundle\Traits\QueryBuilderHelperInterface;
+use Survos\CoreBundle\Traits\QueryBuilderHelperTrait;
 
 /**
  * @extends ServiceEntityRepository<Thumb>
  */
-class ThumbRepository extends ServiceEntityRepository
+class ThumbRepository extends ServiceEntityRepository implements QueryBuilderHelperInterface
 {
+    use QueryBuilderHelperTrait;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Thumb::class);

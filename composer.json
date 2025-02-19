@@ -75,7 +75,8 @@
         "symfony/yaml": "^7.2.3",
         "symfonycasts/verify-email-bundle": "^1.17.3",
         "twig/extra-bundle": "^3.20",
-        "twig/twig": "^3.20"
+        "twig/twig": "^3.20",
+        "zenstruck/class-metadata": "^1.1"
     },
     "config": {
         "allow-plugins": {
@@ -83,7 +84,8 @@
             "php-http/discovery": true,
             "survos/installer": true,
             "symfony/flex": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "zenstruck/class-metadata": true
         },
         "bump-after-update": true,
         "sort-packages": true
@@ -129,7 +131,12 @@
         "symfony": {
             "allow-contrib": "true",
             "require": "^7.2"
-        }
+        },
+            "class-metadata": {
+                "paths": [
+                    "src/Entity"
+                ]
+            }
     },
     "require-dev": {
         "maximebf/debugbar": "^2.1.3",

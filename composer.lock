@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4b75b5ef4312ab9930686f06c51d6973",
+    "content-hash": "cb843a566f2bb47ba344fe6d5e90548d",
     "packages": [
         {
             "name": "api-platform/doctrine-common",
@@ -12748,6 +12748,70 @@
                 }
             ],
             "time": "2022-08-31T14:56:15+00:00"
+        },
+        {
+            "name": "zenstruck/class-metadata",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zenstruck/class-metadata.git",
+                "reference": "f270bf620cc898dfe97ba6cd2baa24a74c56366f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zenstruck/class-metadata/zipball/f270bf620cc898dfe97ba6cd2baa24a74c56366f",
+                "reference": "f270bf620cc898dfe97ba6cd2baa24a74c56366f",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^2.0",
+                "php": ">=8.0"
+            },
+            "conflict": {
+                "composer": "<2.4"
+            },
+            "require-dev": {
+                "composer/composer": "^2.4",
+                "doctrine/persistence": "^1.0|^2.0|^3.0",
+                "phpstan/phpstan": "^1.4",
+                "phpunit/phpunit": "^9.6.21",
+                "symfony/phpunit-bridge": "^6.0"
+            },
+            "suggest": {
+                "doctrine/persistence": "To use the AliasManagerRegistry decorator"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Zenstruck\\Metadata\\Composer\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zenstruck\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Bond",
+                    "email": "kevinbond@gmail.com"
+                }
+            ],
+            "description": "Add human readable class aliases & metadata with efficient lookups.",
+            "homepage": "https://github.com/zenstruck/class-metadata",
+            "support": {
+                "issues": "https://github.com/zenstruck/class-metadata/issues",
+                "source": "https://github.com/zenstruck/class-metadata/tree/v1.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-11-14T20:34:23+00:00"
         },
         {
             "name": "zenstruck/console-extra",

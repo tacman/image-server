@@ -2,15 +2,35 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\ThumbRepository;
 use App\Workflow\ThumbWorkflowInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\WorkflowBundle\Traits\MarkingInterface;
 use Survos\WorkflowBundle\Traits\MarkingTrait;
+use Zenstruck\Alias;
 
 #[ORM\Entity(repositoryClass: ThumbRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(
+            normalizationContext: ['groups' => ['media.read']],
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['media.read']],
+        )
+    ]
+)]
+#[ApiFilter(filterClass: SearchFilter::class, properties: [
+    'liipCode' => 'exact',
+    'marking' => 'exact',
+    'media' => 'exact',
+])]
+#[Alias('thumb')]
 class Thumb implements MarkingInterface, \Stringable, ThumbWorkflowInterface
 {
     use MarkingTrait;

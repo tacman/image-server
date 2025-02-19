@@ -49,18 +49,18 @@ class MediaWorkflow implements IMediaWorkflow
         private EntityManagerInterface       $entityManager,
         private ThumbRepository              $thumbRepository,
         private readonly FilesystemOperator  $defaultStorage,
-        private readonly LoggerInterface     $logger,
-        private readonly HttpClientInterface $httpClient,
-        private readonly ApiService          $apiService,
-        private readonly MediaRepository     $mediaRepository,
-        #[Target(Thumb::WORKFLOW_NAME)] private WorkflowInterface $thumbWorkflow,
+        private readonly LoggerInterface                          $logger,
+        private readonly HttpClientInterface                      $httpClient,
+        private readonly ApiService                               $apiService,
+        private readonly MediaRepository                          $mediaRepository,
+        #[Target(ThumbWorkflowInterface::WORKFLOW_NAME)] private WorkflowInterface $thumbWorkflow,
+        #[Target(IMediaWorkflow::WORKFLOW_NAME)] private WorkflowInterface $mediaWorkflow,
 
         #[Autowire('@liip_imagine.service.filter')]
-        private readonly FilterService       $filterService,
-        private SerializerInterface          $serializer,
-        private NormalizerInterface          $normalizer,
-        #[Autowire('%env(SAIS_API_ENDPOINT)%')] private string $apiEndpoint
-
+        private readonly FilterService                            $filterService,
+        private SerializerInterface                               $serializer,
+        private NormalizerInterface                               $normalizer,
+        #[Autowire('%env(SAIS_API_ENDPOINT)%')] private string    $apiEndpoint,
     )
     {
     }
@@ -97,7 +97,12 @@ class MediaWorkflow implements IMediaWorkflow
     public function onCompleted(CompletedEvent $event): void
     {
         $media = $this->getMedia($event);
-        $this->resizeMedia($media, ['tiny', 'small', 'medium', 'large']);
+        if ($media->getStatusCode() !== 200) {
+            $this->mediaWorkflow->apply($media, IMediaWorkflow::TRANSITION_DOWNLOAD_FAILED);
+        } else {
+            $this->resizeMedia($media, ['tiny', 'small', 'medium', 'large']);
+        }
+        $this->entityManager->flush();
 //        $event->getContext()['liipCodes']);
 
         // eventually, when the download is complete, dispatch a webhook
@@ -122,6 +127,9 @@ class MediaWorkflow implements IMediaWorkflow
 
     private function resizeMedia(Media $media, array $liipCodes): void
     {
+        if ($media->getStatusCode() !== 200) {
+            return;
+        }
         $stamps = [];
         $stamps[] = new TransportNamesStamp('resize');
         foreach ($liipCodes as $filter) {
@@ -155,6 +163,10 @@ class MediaWorkflow implements IMediaWorkflow
         $this->resizeMedia($media, ['tiny','medium','large']);
     }
 
+    /**
+     * @throws FilesystemException
+     * @throws TransportExceptionInterface
+     */
     #[AsTransitionListener(self::WORKFLOW_NAME, IMediaWorkflow::TRANSITION_DOWNLOAD)]
     public function onDownload(TransitionEvent $event): void
     {
@@ -164,8 +176,14 @@ class MediaWorkflow implements IMediaWorkflow
 
         $path = $media->getRoot() . '/' . SaisClientService::calculatePath($media->getCode());
         $tempFile = $media->getCode() . '.' . pathinfo($url, PATHINFO_EXTENSION);// no dirs
+        $media->setStatusCode(200);
         if (!file_exists($tempFile)) {
-            $this->downloadUrl($url, $tempFile);
+            try {
+                $this->downloadUrl($url, $tempFile);
+            } catch (\Exception $e) {
+                $media->setStatusCode($e->getCode());
+                return;
+            }
         }
 
         $content = file_get_contents($tempFile);
@@ -251,8 +269,9 @@ class MediaWorkflow implements IMediaWorkflow
         $response = $client->request('GET', $url);
 
 // Responses are lazy: this code is executed as soon as headers are received
-        if (200 !== $response->getStatusCode()) {
-            throw new \Exception("Problem with $url " . $response->getStatusCode());
+        $code = $response->getStatusCode();
+        if (200 !== $code) {
+            throw new \Exception("Problem with $url " . $response->getStatusCode(), code: $code);
         }
 
         $fileHandler = fopen($tempFile, 'w');

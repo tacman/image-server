@@ -25,6 +25,7 @@ use Survos\WorkflowBundle\Traits\MarkingTrait;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Thumbhash\Thumbhash;
+use Zenstruck\Alias;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
 #[ApiResource(
@@ -43,6 +44,7 @@ use Thumbhash\Thumbhash;
 ])]
 #[ApiFilter(filterClass: DateFilter::class, properties: ['createdAt','updatedAt'])]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['createdAt','updatedAt'])]
+#[Alias('media')]
 class Media implements MarkingInterface, \Stringable, RouteParametersInterface, IMediaWorkflow
 {
     use MarkingTrait;
@@ -76,6 +78,10 @@ class Media implements MarkingInterface, \Stringable, RouteParametersInterface, 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['media.read'])]
     private ?string $blur = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['media.read'])]
+    private ?int $statusCode = null;
 
     /**
      * @param string|null $path
@@ -279,5 +285,17 @@ class Media implements MarkingInterface, \Stringable, RouteParametersInterface, 
     public function getId(): string
     {
         return $this->getCode();
+    }
+
+    public function getStatusCode(): ?int
+    {
+        return $this->statusCode;
+    }
+
+    public function setStatusCode(?int $statusCode): static
+    {
+        $this->statusCode = $statusCode;
+
+        return $this;
     }
 }
